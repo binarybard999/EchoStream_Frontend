@@ -1,10 +1,23 @@
 import "./App.css"
+import React from "react";
+import { BrowserRouter, Router, Route, Routes } from "react-router-dom";
+import Master from "./components/layouts/Master";
+import Home from "./components/pages/Home";
 
 function App() {
 
+    // let myVar = import.meta.env.VITE_MY_VAR; //and use it in the following way-
+    // <p>my variable = {myVar || "hello"}</p>
+
     return (
         <>
-            <h1 className="bg-red-900 flex justify-center p-7 text-lg">Welcome to React!</h1>
+            <BrowserRouter >
+                <Routes>
+                    <Route path="/" element={<Master />} >
+                        <Route path="/" element={<Home />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </>
     )
 }
