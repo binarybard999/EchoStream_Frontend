@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useSidebar } from "../contexts/SidebarContext.jsx";
 
 export default function Header() {
     const [isLogin, setIsLogin] = useState(false);
     const navigate = useNavigate();
+    const { toggleSidebar } = useSidebar(); // Access the toggle function
 
     return (
         <>
@@ -12,7 +14,7 @@ export default function Header() {
                 {/* Hamburger menu, logo, and website name */}
                 <div className="flex">
                     {/* Hamburger menu */}
-                    <div className="content-center cursor-pointer">
+                    <div className="content-center cursor-pointer" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon="fa-solid fa-bars" className="w-5 h-10" />
                     </div>
 

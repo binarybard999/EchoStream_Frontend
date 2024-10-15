@@ -6,6 +6,8 @@ import Home from "./components/pages/Home";
 
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Videos from "./components/pages/Videos";
+import Channels from "./components/pages/Channels";
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Master />} >
                         <Route path="/" element={<Home />} />
+                        <Route path="/videos" element={<Videos />} />
+                        <Route path="/channels" element={<Channels />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />

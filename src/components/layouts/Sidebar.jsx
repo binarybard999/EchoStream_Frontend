@@ -1,57 +1,66 @@
-// src/components/Sidebar.js
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NavLink } from "react-router-dom";
+import { useSidebar } from "../contexts/SidebarContext.jsx";
 import { useState } from "react";
 
 export default function Sidebar() {
     const [isLogin, setIsLogin] = useState(false);
+    const { isSidebarOpen } = useSidebar();
+
+    const menuItems = [
+        { name: 'Home', icon: 'fa-solid fa-house', path: '/' },
+        { name: 'Liked Videos', icon: 'fa-solid fa-thumbs-up', path: '/liked-videos' },
+        { name: 'History', icon: 'fa-solid fa-history', path: '/history' },
+        { name: 'My Content', icon: 'fa-solid fa-video', path: '/my-content' },
+        { name: 'Collections', icon: 'fa-solid fa-folder', path: '/collections' },
+        { name: 'Subscribers', icon: 'fa-solid fa-users', path: '/subscribers' },
+        { name: 'Community', icon: 'fa-solid fa-comments', path: '/community' },
+    ];
+
+    const bottomMenuItems = [
+        { name: 'Support', icon: 'fa-solid fa-life-ring', path: '/support' },
+        { name: 'Settings', icon: 'fa-solid fa-gear', path: '/settings' },
+    ];
 
     return (
-        <div className="w-44 md:w-52 bg-[#0d0d0f] text-white h-[calc(100vh-4rem)] fixed top-16 md:flex flex-col justify-between py-5 px-2 hidden">
+        <div className={`w-52 md:w-52 bg-[#0d0d0f] text-white h-[calc(100vh-4rem)] fixed top-16 ${isSidebarOpen ? 'block' : 'hidden'} md:flex flex-col justify-between py-5 px-2 overflow-y-auto`}>
             {/* Top Menu */}
             <div>
                 <ul className="space-y-6">
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-house" className="w-5 h-5 mr-2" />
-                        Home
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-thumbs-up" className="w-5 h-5 mr-2" />
-                        Liked Videos
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-history" className="w-5 h-5 mr-2" />
-                        History
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-video" className="w-5 h-5 mr-2" />
-                        My Content
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-folder" className="w-5 h-5 mr-2" />
-                        Collections
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-users" className="w-5 h-5 mr-2" />
-                        Subscribers
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-comments" className="w-5 h-5 mr-2" />
-                        Community
-                    </li>
+                    {menuItems.map((item) => (
+                        <li key={item.name}>
+                            <NavLink
+                                to={item.path}
+                                className={({ isActive }) =>
+                                    `flex items-center py-2 px-5 rounded-xl ${isActive ? 'bg-[#1c1d1f] text-[#e473ff]' : 'hover:bg-[#1c1d1f] hover:text-[#e473ff]'
+                                    }`
+                                }
+                            >
+                                <FontAwesomeIcon icon={item.icon} className="w-5 h-5 mr-2" />
+                                {item.name}
+                            </NavLink>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
             {/* Bottom Menu */}
             <div>
-                <ul className="space-y-6">
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-life-ring" className="w-5 h-5 mr-2" />
-                        Support
-                    </li>
-                    <li className="cursor-pointer flex items-center py-2 px-5 hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff]">
-                        <FontAwesomeIcon icon="fa-solid fa-gear" className="w-5 h-5 mr-2" />
-                        Settings
-                    </li>
+                <ul className="space-y-6 mt-6">
+                    {bottomMenuItems.map((item) => (
+                        <li key={item.name}>
+                            <NavLink
+                                to={item.path}
+                                className={({ isActive }) =>
+                                    `flex items-center py-2 px-5 rounded-xl ${isActive ? 'bg-[#1c1d1f] text-[#e473ff]' : 'hover:bg-[#1c1d1f] hover:text-[#e473ff]'
+                                    }`
+                                }
+                            >
+                                <FontAwesomeIcon icon={item.icon} className="w-5 h-5 mr-2" />
+                                {item.name}
+                            </NavLink>
+                        </li>
+                    ))}
                 </ul>
 
                 {/* Conditional Login/Logout */}

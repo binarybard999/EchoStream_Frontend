@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Home() {
+export default function Videos() {
     const videoData = [
         {
             id: 1,
@@ -42,50 +42,6 @@ export default function Home() {
             views: "2M views",
             timestamp: "1 month ago",
         },
-        // Add more video objects as needed
-    ];
-
-    const channelData = [
-        {
-            id: 1,
-            name: "Channel 1",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 2,
-            name: "Channel 2",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 3,
-            name: "Channel 3",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 4,
-            name: "Channel 4",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 5,
-            name: "Channel 5",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 6,
-            name: "Channel 6",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 7,
-            name: "Channel 7",
-            avatar: "https://dummyimage.com/100x100",
-        },
-        {
-            id: 8,
-            name: "Channel 8",
-            avatar: "https://dummyimage.com/100x100",
-        },
     ];
 
     const topVideos = videoData.slice(0, 4);
@@ -93,7 +49,7 @@ export default function Home() {
 
     return (
         <div className="bg-[#0d0d0f] p-5 h-full md:ml-52 pt-16">
-            <h1 className="text-3xl font-bold text-white mb-5">Home</h1>
+            <h1 className="text-3xl font-bold text-white mb-5">Videos</h1>
 
             {/* Top Videos Section */}
             <div className="mb-8">
@@ -118,26 +74,6 @@ export default function Home() {
                             <p className="text-gray-500 text-sm">
                                 {video.views} • {video.timestamp}
                             </p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Channels Section */}
-            <div className="mb-8">
-                <h2 className="text-xl text-white mb-3">Featured Channels</h2>
-                <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
-                    {channelData.map((channel) => (
-                        <div
-                            key={channel.id}
-                            className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
-                        >
-                            <img
-                                src={channel.avatar}
-                                alt={channel.name}
-                                className="w-20 h-20 rounded-full object-cover mb-2"
-                            />
-                            <p className="truncate">{channel.name}</p>
                         </div>
                     ))}
                 </div>
