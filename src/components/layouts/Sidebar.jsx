@@ -1,11 +1,12 @@
+// src/components/Sidebar.js
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react"; // Assuming you manage login state locally or through context
+import { useState } from "react";
 
 export default function Sidebar() {
-    const [isLogin, setIsLogin] = useState(false); // Simulating login state
+    const [isLogin, setIsLogin] = useState(false);
 
     return (
-        <div className="w-44 md:w-52 bg-[#0d0d0f] text-white h-full flex flex-col justify-between py-5 px-2">
+        <div className="w-44 md:w-52 bg-[#0d0d0f] text-white h-[calc(100vh-4rem)] fixed top-16 md:flex flex-col justify-between py-5 px-2 hidden">
             {/* Top Menu */}
             <div>
                 <ul className="space-y-6">
@@ -57,7 +58,7 @@ export default function Sidebar() {
                 <div className="mt-6">
                     {isLogin ? (
                         <button
-                            onClick={() => setIsLogin(false)} // Logout action
+                            onClick={() => setIsLogin(false)}
                             className="w-full py-2 px-5 bg-red-500 rounded-xl hover:bg-red-800 text-white flex justify-center items-center"
                         >
                             <FontAwesomeIcon icon="fa-solid fa-sign-out-alt" className="w-5 h-5 mr-2" />
@@ -65,7 +66,7 @@ export default function Sidebar() {
                         </button>
                     ) : (
                         <button
-                            onClick={() => setIsLogin(true)} // Login action for example
+                            onClick={() => setIsLogin(true)}
                             className="w-full py-2 px-5 bg-[#da4cfd] rounded-xl hover:bg-[#6e2b7e] text-white flex justify-center items-center"
                         >
                             <FontAwesomeIcon icon="fa-solid fa-sign-in-alt" className="w-5 h-5 mr-2" />
