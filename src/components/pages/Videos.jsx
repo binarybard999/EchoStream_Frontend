@@ -1,11 +1,12 @@
 import React from "react";
 
 export default function Videos() {
+    const thumbnailURL = "https://dummyimage.com/640x360";
     const videoData = [
         {
             id: 1,
             title: "Video Title 1",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 1",
             views: "1.2M views",
             timestamp: "2 days ago",
@@ -13,7 +14,7 @@ export default function Videos() {
         {
             id: 2,
             title: "Video Title 2",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 2",
             views: "500K views",
             timestamp: "1 week ago",
@@ -21,7 +22,7 @@ export default function Videos() {
         {
             id: 3,
             title: "Video Title 3",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 3",
             views: "300K views",
             timestamp: "5 days ago",
@@ -29,7 +30,7 @@ export default function Videos() {
         {
             id: 4,
             title: "Video Title 4",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 4",
             views: "1M views",
             timestamp: "3 days ago",
@@ -37,7 +38,7 @@ export default function Videos() {
         {
             id: 5,
             title: "Video Title 5",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 5",
             views: "2M views",
             timestamp: "1 month ago",

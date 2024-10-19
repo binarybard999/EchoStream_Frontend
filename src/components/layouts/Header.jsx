@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSidebar } from "../contexts/SidebarContext.jsx";
 
 export default function Header() {
@@ -14,19 +14,19 @@ export default function Header() {
                 {/* Hamburger menu, logo, and website name */}
                 <div className="flex">
                     {/* Hamburger menu */}
-                    <div className="content-center cursor-pointer" onClick={toggleSidebar}>
+                    <div className="content-center cursor-pointer block md:hidden" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon="fa-solid fa-bars" className="w-5 h-10" />
                     </div>
 
                     {/* Logo */}
-                    <div className="px-3 content-center cursor-pointer">
+                    <Link to="/" className="px-3 content-center cursor-pointer">
                         <img src="https://imgs.search.brave.com/KOOIgb6PSGsZwAt4KikyG-HW-RvOhyZyLvc2oV8BKTQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bG9nb2pveS5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjAx/MTEzMTEyMzE1L1J1/dGhsZXNzX2NvbXBy/ZXNzZWQuanBn" className="w-[48px] h-[48px] rounded-xl object-cover" alt="EchoStream" />
-                    </div>
+                    </Link>
 
                     {/* Website Name */}
-                    <div className="content-center cursor-pointer font-bold">
+                    <Link to="/" className="content-center cursor-pointer font-bold">
                         <h2>EchoStream</h2>
-                    </div>
+                    </Link>
                 </div>
 
                 {/* Navigation links */}
@@ -36,7 +36,6 @@ export default function Header() {
                             <NavLink
                                 to="/"
                                 className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                                activeClassName="text-[#e473ff]"
                             >
                                 Home
                             </NavLink>
@@ -45,7 +44,6 @@ export default function Header() {
                             <NavLink
                                 to="/videos"
                                 className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                                activeClassName="text-[#e473ff]"
                             >
                                 Videos
                             </NavLink>
@@ -54,7 +52,6 @@ export default function Header() {
                             <NavLink
                                 to="/channels"
                                 className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                                activeClassName="text-[#e473ff]"
                             >
                                 Channels
                             </NavLink>

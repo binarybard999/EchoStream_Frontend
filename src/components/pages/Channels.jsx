@@ -2,65 +2,66 @@
 import React from "react";
 
 export default function Channels() {
+    const channelURL = "https://dummyimage.com/100x100";
     const channelData = [
         {
             id: 1,
             name: "Channel 1",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "1.2M subscribers",
         },
         {
             id: 2,
             name: "Channel 2",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "500K subscribers",
         },
         {
             id: 3,
             name: "Channel 3",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "300K subscribers",
         },
         {
             id: 4,
             name: "Channel 4",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "1M subscribers",
         },
         {
             id: 5,
             name: "Channel 5",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "2M subscribers",
         },
         {
             id: 6,
             name: "Channel 6",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "800K subscribers",
         },
         {
             id: 7,
             name: "Channel 7",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "900K subscribers",
         },
         {
             id: 8,
             name: "Channel 8",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "1.5M subscribers",
         },
         {
             id: 9,
             name: "Channel 9",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "750K subscribers",
         },
         {
             id: 10,
             name: "Channel 10",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
             subscribers: "1.3M subscribers",
         },
     ];

@@ -7,7 +7,9 @@ import Home from "./components/pages/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Videos from "./components/pages/Videos";
+import VideoDetail from "./components/pages/VideoDetail";
 import Channels from "./components/pages/Channels";
+import ChannelDetail from "./components/pages/ChannelDetail";
 
 function App() {
 
@@ -20,8 +22,11 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Master />} >
                         <Route path="/" element={<Home />} />
+                        <Route path="/home" element={<Home />} />
                         <Route path="/videos" element={<Videos />} />
+                        <Route path="/view-video" element={<VideoDetail />} />
                         <Route path="/channels" element={<Channels />} />
+                        <Route path="/view-channel" element={<ChannelDetail />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />

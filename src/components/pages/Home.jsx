@@ -1,11 +1,15 @@
+// src/components/Home.jsx
 import React from "react";
+import { NavLink, Link } from "react-router-dom";
 
 export default function Home() {
+    const thumbnailURL = "https://dummyimage.com/640x360";
+    const channelURL = "https://dummyimage.com/100x100";
     const videoData = [
         {
             id: 1,
             title: "Video Title 1",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 1",
             views: "1.2M views",
             timestamp: "2 days ago",
@@ -13,7 +17,7 @@ export default function Home() {
         {
             id: 2,
             title: "Video Title 2",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 2",
             views: "500K views",
             timestamp: "1 week ago",
@@ -21,7 +25,7 @@ export default function Home() {
         {
             id: 3,
             title: "Video Title 3",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 3",
             views: "300K views",
             timestamp: "5 days ago",
@@ -29,7 +33,7 @@ export default function Home() {
         {
             id: 4,
             title: "Video Title 4",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 4",
             views: "1M views",
             timestamp: "3 days ago",
@@ -37,59 +41,57 @@ export default function Home() {
         {
             id: 5,
             title: "Video Title 5",
-            thumbnail: "https://dummyimage.com/640x360",
+            thumbnail: thumbnailURL,
             channel: "Channel Name 5",
             views: "2M views",
             timestamp: "1 month ago",
-        },
-        // Add more video objects as needed
+        }
     ];
 
     const channelData = [
         {
             id: 1,
             name: "Channel 1",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 2,
             name: "Channel 2",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 3,
             name: "Channel 3",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 4,
             name: "Channel 4",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 5,
             name: "Channel 5",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 6,
             name: "Channel 6",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 7,
             name: "Channel 7",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
         {
             id: 8,
             name: "Channel 8",
-            avatar: "https://dummyimage.com/100x100",
+            avatar: channelURL,
         },
     ];
 
     const topVideos = videoData.slice(0, 4);
-    // const remainingVideos = videoData.slice(4);
 
     return (
         <div className="bg-[#0d0d0f] p-5 h-full md:ml-52 pt-16">
@@ -97,10 +99,16 @@ export default function Home() {
 
             {/* Top Videos Section */}
             <div className="mb-8">
-                <h2 className="text-xl text-white mb-3">Top Videos</h2>
+                <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-xl text-white">Top Videos</h2>
+                    <NavLink to="/videos" className="text-[#e473ff] hover:underline">
+                        View More
+                    </NavLink>
+                </div>
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {topVideos.map((video) => (
-                        <div
+                        <Link
+                            to="/view-video"
                             key={video.id}
                             className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                         >
@@ -118,17 +126,23 @@ export default function Home() {
                             <p className="text-gray-500 text-sm">
                                 {video.views} • {video.timestamp}
                             </p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
 
             {/* Channels Section */}
             <div className="mb-8">
-                <h2 className="text-xl text-white mb-3">Featured Channels</h2>
+                <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-xl text-white">Featured Channels</h2>
+                    <NavLink to="/channels" className="text-[#e473ff] hover:underline">
+                        View More
+                    </NavLink>
+                </div>
                 <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
                     {channelData.map((channel) => (
-                        <div
+                        <Link
+                            to="/view-channel"
                             key={channel.id}
                             className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                         >
@@ -138,7 +152,7 @@ export default function Home() {
                                 className="w-20 h-20 rounded-full object-cover mb-2"
                             />
                             <p className="truncate">{channel.name}</p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -148,7 +162,8 @@ export default function Home() {
                 <h2 className="text-xl text-white mb-3">More Videos</h2>
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {videoData.map((video) => (
-                        <div
+                        <Link
+                            to="/view-video"
                             key={video.id}
                             className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                         >
@@ -166,7 +181,7 @@ export default function Home() {
                             <p className="text-gray-500 text-sm">
                                 {video.views} • {video.timestamp}
                             </p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

@@ -23,7 +23,7 @@ export default function Sidebar() {
     ];
 
     return (
-        <div className={`w-52 md:w-52 bg-[#0d0d0f] text-white h-[calc(100vh-4rem)] fixed top-16 ${isSidebarOpen ? 'block' : 'hidden'} md:flex flex-col justify-between py-5 px-2 overflow-y-auto`}>
+        <div className={`w-52 md:w-52 bg-[#0d0d0f] text-white h-[calc(100vh-4rem)] fixed top-16 ${isSidebarOpen ? 'block' : 'hidden'} md:flex flex-col justify-between py-5 px-2 overflow-y-auto z-50`}>
             {/* Top Menu */}
             <div>
                 <ul className="space-y-6">

@@ -16,7 +16,7 @@ export default function Master() {
                     <Sidebar />
 
                     {/* Page content rendered here via Outlet */}
-                    <div className="flex-grow p-5 border-2 bg-gray-900">
+                    <div className="flex-grow pt-5 border-2 bg-gray-900">
                         <Outlet />
                     </div>
                 </div>
