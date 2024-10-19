@@ -1,5 +1,5 @@
-// src/components/Channels.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Channels() {
     const channelURL = "https://dummyimage.com/100x100";
@@ -80,7 +80,8 @@ export default function Channels() {
                 <h2 className="text-xl text-white mb-3">Featured Channels</h2>
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {featuredChannels.map((channel) => (
-                        <div
+                        <Link
+                            to="/view-channel"
                             key={channel.id}
                             className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                         >
@@ -91,7 +92,7 @@ export default function Channels() {
                             />
                             <p className="text-lg font-semibold truncate">{channel.name}</p>
                             <p className="text-gray-400 text-sm">{channel.subscribers}</p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -101,7 +102,8 @@ export default function Channels() {
                 <h2 className="text-xl text-white mb-3">All Channels</h2>
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {channelData.map((channel) => (
-                        <div
+                        <Link
+                            to="/view-channel"
                             key={channel.id}
                             className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                         >
@@ -112,7 +114,7 @@ export default function Channels() {
                             />
                             <p className="text-lg font-semibold truncate">{channel.name}</p>
                             <p className="text-gray-400 text-sm">{channel.subscribers}</p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

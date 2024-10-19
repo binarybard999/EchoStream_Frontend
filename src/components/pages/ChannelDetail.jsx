@@ -1,4 +1,4 @@
-// src/components/ChannelDetail.jsx
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
 export default function ChannelDetail() {
@@ -50,11 +50,14 @@ export default function ChannelDetail() {
                 <button
                     onClick={handleFollowToggle}
                     className={`px-3 py-2 font-bold shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]
-                        ${isFollowing ? "bg-red-500 text-white" : "bg-[#e473ff] text-black"}
-                    `}
+                    ${isFollowing ? "bg-red-500 text-white" : "bg-[#e473ff] text-black"}`}
                 >
-                    {isFollowing ? "Unfollow" : "Follow"}
+                    <span className="ml-2">
+                        <FontAwesomeIcon icon={isFollowing ? "fa-user-minus" : "fa-user-plus"} />
+                    </span>
+                    {isFollowing ? " Unfollow" : " Follow"}
                 </button>
+
             </div>
 
             {/* Tabs */}
@@ -64,9 +67,8 @@ export default function ChannelDetail() {
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`py-2 px-3 font-semibold transition-colors duration-200 ${
-                                activeTab === tab ? "text-[#e473ff] border-b-2 border-[#e473ff]" : "text-gray-400"
-                            }`}
+                            className={`py-2 px-3 font-semibold transition-colors duration-200 ${activeTab === tab ? "text-[#e473ff] border-b-2 border-[#e473ff]" : "text-gray-400"
+                                }`}
                         >
                             {tab}
                         </button>

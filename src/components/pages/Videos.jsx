@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Videos() {
     const thumbnailURL = "https://dummyimage.com/640x360";
@@ -57,7 +58,8 @@ export default function Videos() {
                 <h2 className="text-xl text-white mb-3">Top Videos</h2>
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {topVideos.map((video) => (
-                        <div
+                        <Link
+                            to="/view-video"
                             key={video.id}
                             className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                         >
@@ -75,7 +77,7 @@ export default function Videos() {
                             <p className="text-gray-500 text-sm">
                                 {video.views} • {video.timestamp}
                             </p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -85,7 +87,8 @@ export default function Videos() {
                 <h2 className="text-xl text-white mb-3">More Videos</h2>
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {videoData.map((video) => (
-                        <div
+                        <Link
+                            to="/view-video"
                             key={video.id}
                             className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                         >
@@ -103,7 +106,7 @@ export default function Videos() {
                             <p className="text-gray-500 text-sm">
                                 {video.views} • {video.timestamp}
                             </p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

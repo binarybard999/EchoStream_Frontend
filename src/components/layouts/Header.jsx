@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -5,12 +6,17 @@ import { useSidebar } from "../contexts/SidebarContext.jsx";
 
 export default function Header() {
     const [isLogin, setIsLogin] = useState(false);
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
     const navigate = useNavigate();
-    const { toggleSidebar } = useSidebar(); // Access the toggle function
+    const { toggleSidebar } = useSidebar();
+
+    const handleSearchToggle = () => {
+        setIsSearchVisible((prev) => !prev);
+    };
 
     return (
         <>
-            <header className="bg-[#0d0d0f] text-white flex justify-between items-center px-5 py-3 fixed top-0 w-full">
+            <header className="bg-[#0d0d0f] text-white flex justify-between items-center px-5 py-3 fixed top-0 w-full z-20">
                 {/* Hamburger menu, logo, and website name */}
                 <div className="flex">
                     {/* Hamburger menu */}
@@ -65,19 +71,22 @@ export default function Header() {
                         <input
                             placeholder="Search"
                             name="searchbar"
-                            className="bg-[#1c1d1f] text-white rounded-xl h-[100%] w-full px-5 py-3 pl-10 hidden md:block"
+                            className={`bg-[#1c1d1f] text-white rounded-xl h-[100%] w-full px-5 py-3 pl-10 hidden md:block`}
                         />
                         <FontAwesomeIcon
                             icon="fa-solid fa-search"
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hidden md:block"
                         />
-                        <FontAwesomeIcon icon="fa-solid fa-search" className="block md:hidden" />
+                        <FontAwesomeIcon
+                            icon="fa-solid fa-search"
+                            className="block md:hidden cursor-pointer"
+                            onClick={handleSearchToggle}
+                        />
                     </div>
                 </div>
 
                 {/* Login and Sign Up buttons */}
                 {isLogin ? (
-                    // Display username and avatar if logged in
                     <div className="hidden min-[700px]:block">
                         <div className="flex content-center">
                             <div id="username" className="px-3 content-center font-bold">
@@ -89,7 +98,6 @@ export default function Header() {
                         </div>
                     </div>
                 ) : (
-                    // Login and Register buttons
                     <div className="hidden md:block">
                         <div className="flex">
                             <button
@@ -108,6 +116,17 @@ export default function Header() {
                     </div>
                 )}
             </header>
+
+            {/* Mobile Search Bar Overlay */}
+            {isSearchVisible && (
+                <div className="md:hidden fixed top-[4rem] left-0 w-full bg-[#0d0d0f] p-3 z-10">
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        className="w-full bg-[#1c1d1f] text-white p-3 rounded-xl focus:outline-none"
+                    />
+                </div>
+            )}
         </>
     );
 }
