@@ -11,7 +11,7 @@ export default function Sidebar() {
         { name: 'Home', icon: 'fa-solid fa-house', path: '/' },
         { name: 'Liked Videos', icon: 'fa-solid fa-thumbs-up', path: '/liked-videos' },
         { name: 'History', icon: 'fa-solid fa-history', path: '/history' },
-        { name: 'My Content', icon: 'fa-solid fa-video', path: '/my-content' },
+        { name: 'My Content', icon: 'fa-solid fa-video', path: '/my-channel' },
         { name: 'Collections', icon: 'fa-solid fa-folder', path: '/collections' },
         { name: 'Subscribers', icon: 'fa-solid fa-users', path: '/subscribers' },
         { name: 'Community', icon: 'fa-solid fa-comments', path: '/community' },

@@ -10,6 +10,7 @@ import Videos from "./components/pages/Videos";
 import VideoDetail from "./components/pages/VideoDetail";
 import Channels from "./components/pages/Channels";
 import ChannelDetail from "./components/pages/ChannelDetail";
+import SelfChannelDetail from "./components/user/SelfChannelView";
 
 function App() {
 
@@ -27,6 +28,8 @@ function App() {
                         <Route path="/view-video" element={<VideoDetail />} />
                         <Route path="/channels" element={<Channels />} />
                         <Route path="/view-channel" element={<ChannelDetail />} />
+
+                        <Route path="/my-channel" element={<SelfChannelDetail />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />

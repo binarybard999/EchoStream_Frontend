@@ -49,7 +49,7 @@ export default function ChannelDetail() {
                 </div>
                 <button
                     onClick={handleFollowToggle}
-                    className={`px-3 py-2 font-bold shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]
+                    className={`px-3 py-2 font-bold rounded-md shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]
                     ${isFollowing ? "bg-red-500 text-white" : "bg-[#e473ff] text-black"}`}
                 >
                     <span className="ml-2">
