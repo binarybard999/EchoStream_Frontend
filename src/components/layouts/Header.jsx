@@ -1,109 +1,122 @@
 // src/components/Header.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 import { useSidebar } from "../contexts/SidebarContext.jsx";
+import axios from "axios";
 
 export default function Header() {
     const [isLogin, setIsLogin] = useState(false);
+    const [user, setUser] = useState({});
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const navigate = useNavigate();
     const { toggleSidebar } = useSidebar();
 
-    const handleSearchToggle = () => {
-        setIsSearchVisible((prev) => !prev);
-    };
+    const handleSearchToggle = () => setIsSearchVisible((prev) => !prev);
+
+    useEffect(() => {
+        const verifyTokens = async () => {
+            const accessToken = Cookies.get("accessToken");
+            const refreshToken = Cookies.get("refreshToken");
+            console.log(accessToken)
+            console.log(refreshToken)
+            if (accessToken) {
+                try {
+                    const decoded = jwtDecode(accessToken);
+                    setUser({ name: decoded.fullName, avatar: decoded.avatar });
+                    setIsLogin(true);
+                } catch (error) {
+                    console.error("Error decoding access token:", error);
+                }
+            } else if (refreshToken) {
+                try {
+                    const response = await axios.post("/api/users/refresh-token", {}, { withCredentials: true });
+                    const { newAccessToken } = response.data;
+
+                    if (newAccessToken) {
+                        Cookies.set("accessToken", newAccessToken);
+                        const decoded = jwtDecode(newAccessToken);
+                        setUser({ name: decoded.fullName, avatar: decoded.avatar });
+                        setIsLogin(true);
+                    } else {
+                        setIsLogin(false);
+                    }
+                } catch (error) {
+                    console.error("Error refreshing access token:", error);
+                    setIsLogin(false);
+                }
+            }
+        };
+
+        verifyTokens();
+    }, []);
 
     return (
         <>
             <header className="bg-[#0d0d0f] text-white flex justify-between items-center px-5 py-3 fixed top-0 w-full z-20">
-                {/* Hamburger menu, logo, and website name */}
                 <div className="flex">
-                    {/* Hamburger menu */}
                     <div className="content-center cursor-pointer block md:hidden" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon="fa-solid fa-bars" className="w-5 h-10" />
                     </div>
 
-                    {/* Logo */}
                     <Link to="/" className="px-3 content-center cursor-pointer">
                         <img src="https://imgs.search.brave.com/KOOIgb6PSGsZwAt4KikyG-HW-RvOhyZyLvc2oV8BKTQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bG9nb2pveS5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjAx/MTEzMTEyMzE1L1J1/dGhsZXNzX2NvbXBy/ZXNzZWQuanBn" className="w-[48px] h-[48px] rounded-xl object-cover" alt="EchoStream" />
                     </Link>
 
-                    {/* Website Name */}
                     <Link to="/" className="content-center cursor-pointer font-bold">
                         <h2>EchoStream</h2>
                     </Link>
                 </div>
 
-                {/* Navigation links */}
                 <div className="hidden min-[1168px]:block mx-8">
                     <ul className="flex justify-center items-center">
                         <li className="me-7">
-                            <NavLink
-                                to="/"
-                                className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                            >
+                            <NavLink to="/" className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2">
                                 Home
                             </NavLink>
                         </li>
                         <li className="me-7">
-                            <NavLink
-                                to="/videos"
-                                className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                            >
+                            <NavLink to="/videos" className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2">
                                 Videos
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink
-                                to="/channels"
-                                className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2"
-                            >
+                            <NavLink to="/channels" className="font-semibold cursor-pointer hover:bg-[#1c1d1f] rounded-xl hover:text-[#e473ff] px-5 py-2">
                                 Channels
                             </NavLink>
                         </li>
                     </ul>
                 </div>
 
-                {/* Search bar */}
                 <div className="content-center w-[35%]">
                     <div className="relative flex items-center justify-end">
                         <input
                             placeholder="Search"
                             name="searchbar"
-                            className={`bg-[#1c1d1f] text-white rounded-xl h-[100%] w-full px-5 py-3 pl-10 hidden md:block`}
+                            className="bg-[#1c1d1f] text-white rounded-xl h-[100%] w-full px-5 py-3 pl-10 hidden md:block"
                         />
-                        <FontAwesomeIcon
-                            icon="fa-solid fa-search"
-                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hidden md:block"
-                        />
-                        <FontAwesomeIcon
-                            icon="fa-solid fa-search"
-                            className="block md:hidden cursor-pointer"
-                            onClick={handleSearchToggle}
-                        />
+                        <FontAwesomeIcon icon="fa-solid fa-search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hidden md:block" />
+                        <FontAwesomeIcon icon="fa-solid fa-search" className="block md:hidden cursor-pointer" onClick={handleSearchToggle} />
                     </div>
                 </div>
 
-                {/* Login and Sign Up buttons */}
-                {isLogin ? (
+                {/* {isLogin && user ? ( */}
                     <div className="hidden min-[700px]:block">
                         <div className="flex content-center">
                             <div id="username" className="px-3 content-center font-bold">
-                                Mikael
+                                {user.name}
                             </div>
                             <div className="content-center">
-                                <img src="https://img.freepik.com/free-vector/mysterious-mafia-man-smoking-cigarette_52683-34828.jpg?t=st=1727870845~exp=1727874445~hmac=4d1f524ffcdd4cdd76382ffa3201587c5a5a6c13477ecfcb7f08d89bb637b50e&w=740" className="h-12 w-12 border-[4px] border-[#e473ff] rounded-xl" alt="avatar" />
+                                <img src={user.avatar} className="h-12 w-12 border-[4px] border-[#e473ff] rounded-xl" alt="avatar" />
                             </div>
                         </div>
                     </div>
-                ) : (
-                    <div className="hidden md:block">
+                {/* ) : ( */}
+                    {/* <div className="hidden md:block">
                         <div className="flex">
-                            <button
-                                className="px-3 py-2 hover:text-[#e473ff]"
-                                onClick={() => navigate("/login")}
-                            >
+                            <button className="px-3 py-2 hover:text-[#e473ff]" onClick={() => navigate("/login")}>
                                 Log in
                             </button>
                             <button
@@ -113,18 +126,13 @@ export default function Header() {
                                 Sign up
                             </button>
                         </div>
-                    </div>
-                )}
+                    </div> */}
+                {/* )} */}
             </header>
 
-            {/* Mobile Search Bar Overlay */}
             {isSearchVisible && (
                 <div className="md:hidden fixed top-[4rem] left-0 w-full bg-[#0d0d0f] p-3 z-10">
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="w-full bg-[#1c1d1f] text-white p-3 rounded-xl focus:outline-none"
-                    />
+                    <input type="text" placeholder="Search" className="w-full bg-[#1c1d1f] text-white p-3 rounded-xl focus:outline-none" />
                 </div>
             )}
         </>

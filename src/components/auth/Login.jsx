@@ -1,55 +1,85 @@
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaSpinner } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-    const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-    });
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Add your login logic here
-        console.log("Logging in with data:", formData);
+        setLoading(true);
+
+        try {
+            // Set withCredentials to true to include cookies
+            const response = await axios.post("/api/users/login", formData, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true, // Allows cookies in requests and responses
+            });
+
+            setLoading(false);
+            toast.success("Login successful! Redirecting...");
+
+            // Check response for status or data needed
+            console.log("Login successful:", response.data);
+
+            // Redirect or additional logic can go here
+            navigate("/");
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.response?.data?.message || "Login failed. Please try again.");
+        }
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-[#0d0d0f]">
-            <div className="bg-[#1c1d1f] p-8 rounded-lg shadow-lg max-w-md w-full">
-                <h2 className="text-white text-2xl font-bold mb-6">Login</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex items-center justify-center min-h-screen bg-[#101010] px-4">
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar closeOnClick pauseOnHover />
+            <div className="w-full max-w-md bg-[#1a1a1d] rounded-lg shadow-lg p-8">
+                <h2 className="text-3xl font-semibold text-center text-white mb-6">Login</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-[#0d0d0f] text-white rounded-md"
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                        onChange={handleInputChange}
+                        value={formData.email}
                         required
                     />
                     <input
                         type="password"
                         name="password"
                         placeholder="Password"
+                        className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                        onChange={handleInputChange}
                         value={formData.password}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-[#0d0d0f] text-white rounded-md"
                         required
                     />
                     <button
                         type="submit"
-                        className="w-full bg-[#e473ff] text-black font-bold py-2 rounded-md hover:bg-[#c653f7] transition-all"
+                        className="w-full bg-[#e473ff] text-white font-bold py-4 rounded-lg hover:bg-[#6e2b7e] transition duration-200 flex items-center justify-center"
+                        disabled={loading}
                     >
-                        Login
+                        {loading ? <FaSpinner className="animate-spin mr-2" /> : "Login"}
                     </button>
                 </form>
+
+                <p className="text-center text-gray-500 mt-6">
+                    Don’t have an account?{" "}
+                    <a href="/register" className="text-[#e473ff] hover:underline">
+                        Sign up
+                    </a>
+                </p>
             </div>
         </div>
     );
 }
-

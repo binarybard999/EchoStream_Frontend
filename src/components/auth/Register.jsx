@@ -1,4 +1,3 @@
-// src/components/Register.js
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -6,156 +5,157 @@ import axios from "axios";
 
 export default function Register() {
     const [formData, setFormData] = useState({
-        username: "",
         fullName: "",
+        username: "",
         email: "",
         password: "",
+        confirmPassword: "",
         avatar: null,
         coverImage: null,
     });
 
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: files[0],
-        }));
+        setFormData({ ...formData, [name]: files[0] });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const form = new FormData();
-            Object.entries(formData).forEach(([key, value]) => {
-                form.append(key, value);
-            });
+        const formDataToSend = new FormData();
 
-            const response = await axios.post("/register", form, {
+        formDataToSend.append("fullName", formData.fullName);
+        formDataToSend.append("username", formData.username);
+        formDataToSend.append("email", formData.email);
+        formDataToSend.append("password", formData.password);
+        if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
+        if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
+
+        try {
+            const response = await axios.post("/api/users/register", formDataToSend, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-
-            if (response.data) {
-                alert("Registration successful!");
-                // Redirect or handle successful registration
-            }
+            console.log(response.data.message);
         } catch (error) {
-            console.error("Registration error:", error);
-            alert("Registration failed. Please try again.");
+            console.error("Error registering user:", error.response ? error.response.data : error.message);
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#0d0d0f] flex justify-center items-center">
-            <div className="flex flex-col md:flex-row bg-gradient-to-tr from-[#381f54] to-[#632b6c] p-5 md:p-10 rounded-3xl shadow-lg max-w-5xl w-full">
-                {/* Left gradient section */}
-                <div className="flex-1 flex flex-col justify-center text-center text-white p-5 md:p-10">
-                    <h1 className="text-3xl font-bold">EchoStream</h1>
-                    <h2 className="text-2xl mt-5">Get Started with Us</h2>
-                    <p className="mt-2">Register your account.</p>
-                    <p className="mt-2">Share your content with the world.</p>
+        <div className="flex items-center justify-center min-h-screen bg-[#101010] px-4">
+            <div className="w-full max-w-lg bg-[#1a1a1d] rounded-xl shadow-lg p-8">
+                <h2 className="text-3xl font-semibold text-center text-white mb-4">Create an Account</h2>
+                <p className="text-center text-gray-400 mb-6">Join the community and start sharing your content!</p>
+
+                {/* Social Login Buttons */}
+                <div className="flex gap-4 mb-8">
+                    <button className="flex-1 bg-[#333] text-white py-3 rounded-lg hover:bg-[#444] transition">
+                        <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                        Sign up with Google
+                    </button>
+                    <button className="flex-1 bg-[#333] text-white py-3 rounded-lg hover:bg-[#444] transition">
+                        <FontAwesomeIcon icon={faGithub} className="mr-2" />
+                        Sign up with GitHub
+                    </button>
                 </div>
 
-                {/* Right form section */}
-                <div className="flex-1 bg-[#1c1d1f] p-5 md:p-10 rounded-3xl text-white">
-                    <h2 className="text-xl font-bold mb-5">Sign Up Account</h2>
-                    <p className="mb-5 text-gray-400">Enter your personal data to create your account.</p>
+                <div className="flex items-center gap-2 mb-6">
+                    <hr className="flex-grow border-gray-600" />
+                    <span className="text-gray-500">or</span>
+                    <hr className="flex-grow border-gray-600" />
+                </div>
 
-                    {/* Social Buttons */}
-                    <div className="flex justify-between gap-3 mb-5">
-                        <button className="flex-1 bg-white text-black py-2 px-4 rounded-md shadow hover:bg-gray-100">
-                            <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                            Google
-                        </button>
-                        <button className="flex-1 bg-white text-black py-2 px-4 rounded-md shadow hover:bg-gray-100">
-                            <FontAwesomeIcon icon={faGithub} className="mr-2" />
-                            Github
-                        </button>
-                    </div>
-
-                    <div className="flex items-center mb-5">
-                        <hr className="flex-grow border-gray-600" />
-                        <span className="px-2 text-gray-400">Or</span>
-                        <hr className="flex-grow border-gray-600" />
-                    </div>
-
-                    {/* Input fields */}
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            className="bg-[#2a2a2d] text-white p-3 rounded-md w-full mb-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#632b6c]"
-                        />
-                        <input
-                            type="text"
-                            name="fullName"
-                            placeholder="Full Name"
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            className="bg-[#2a2a2d] text-white p-3 rounded-md w-full mb-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#632b6c]"
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="bg-[#2a2a2d] text-white p-3 rounded-md w-full mb-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#632b6c]"
-                        />
+                {/* Registration Form */}
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <input
+                        type="text"
+                        name="fullName"
+                        placeholder="Full Name"
+                        onChange={handleInputChange}
+                        className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        onChange={handleInputChange}
+                        className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                        required
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleInputChange}
+                        className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                        required
+                    />
+                    <div className="flex gap-4">
                         <input
                             type="password"
                             name="password"
-                            placeholder="Enter your password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="bg-[#2a2a2d] text-white p-3 rounded-md w-full mb-5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#632b6c]"
+                            placeholder="Password"
+                            onChange={handleInputChange}
+                            className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                            required
                         />
-                        <p className="text-xs text-gray-400 mb-5">Must be at least 8 characters.</p>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Confirm Password"
+                            onChange={handleInputChange}
+                            className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                            required
+                        />
+                    </div>
 
-                        <div className="mb-4">
-                            <label className="block text-gray-400 mb-2">Avatar:</label>
+                    {/* File Upload for Avatar and Cover Image */}
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label className="text-gray-400">
+                            <span>Avatar</span>
                             <input
                                 type="file"
                                 name="avatar"
-                                accept="image/*"
                                 onChange={handleFileChange}
-                                className="text-white"
+                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
+                                accept="image/*"
+                                required
                             />
-                        </div>
-                        <div className="mb-5">
-                            <label className="block text-gray-400 mb-2">Cover Image:</label>
+                        </label>
+                        <label className="text-gray-400">
+                            <span>Cover Image</span>
                             <input
                                 type="file"
                                 name="coverImage"
-                                accept="image/*"
                                 onChange={handleFileChange}
-                                className="text-white"
+                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
+                                accept="image/*"
+                                required
                             />
-                        </div>
+                        </label>
+                    </div>
 
-                        {/* Sign Up Button */}
-                        <button
-                            type="submit"
-                            className="bg-[#e473ff] text-black font-bold py-2 px-4 w-full rounded-md hover:bg-[#d862ed] transition duration-200"
-                        >
-                            Sign Up
-                        </button>
-                    </form>
+                    {/* Register Button */}
+                    <button
+                        type="submit"
+                        className="w-full bg-[#e473ff] text-white py-4 rounded-lg font-bold hover:bg-[#6e2b7e] transition duration-200"
+                    >
+                        Sign Up
+                    </button>
+                </form>
 
-                    <p className="text-center text-gray-400 mt-5">
-                        Already have an account? <a href="/login" className="text-[#e473ff] hover:underline">Log in</a>
-                    </p>
-                </div>
+                {/* Redirect to Login */}
+                <p className="text-center text-gray-500 mt-6">
+                    Already have an account?{" "}
+                    <a href="/login" className="text-[#e473ff] hover:underline">
+                        Log in
+                    </a>
+                </p>
             </div>
         </div>
     );
