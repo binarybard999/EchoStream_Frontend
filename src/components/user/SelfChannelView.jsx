@@ -1,28 +1,67 @@
 // src/components/SelfChannelDetail.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useIsLogin } from '../contexts/IsLoginContext.jsx';
+import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaSpinner } from "react-icons/fa";
 
 export default function SelfChannelDetail() {
     const [activeTab, setActiveTab] = useState("Videos");
+
     const [isAddVideoOpen, setIsAddVideoOpen] = useState(false);
+    const [videoData, setVideoData] = useState({ title: "", description: "", videoFile: null, thumbnail: null });
+
+    const [loading, setLoading] = useState(false);
+
     const [isAddCollectionOpen, setIsAddCollectionOpen] = useState(false);
     const [isAddTweetOpen, setIsAddTweetOpen] = useState(false);
-    const [videoData, setVideoData] = useState({ title: "", description: "", videoFile: null, thumbnail: null });
     const [collectionData, setCollectionData] = useState({ name: "", description: "" });
     const [tweetData, setTweetData] = useState({ content: "" });
 
     const navigate = useNavigate();
+    const { isLogin } = useIsLogin(); // Access login state
 
-    const channel = {
-        id: 1,
-        name: "Your Channel Name",
-        username: "@yourusername",
-        subscribers: "1.5M subscribers",
-        subscribed: "289 subscribed",
-        coverImage: "https://dummyimage.com/1280x300",
-        avatar: "https://dummyimage.com/150x150",
-    };
+    const [channel, setChannel] = useState({
+        name: '',
+        username: '',
+        subscribers: '',
+        subscribed: '',
+        coverImage: '',
+        avatar: '',
+    });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                //change it to fetch user channel info not current user details
+                const response = await axios.get('/api/users/current-user', {}, { withCredentials: true });
+                const userData = response.data.data;
+                // console.log(userData);
+                setChannel({
+                    name: userData.fullName,
+                    username: `@${userData.username}`,
+                    subscribers: `${userData.subscribersCount || 0} subscribers`,
+                    subscribed: `${userData.channelsSubscribedToCount || 0} subscribed`,
+                    coverImage: userData.coverImage,
+                    avatar: userData.avatar,
+                });
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        if (isLogin) {
+            fetchUserData();
+        }
+    }, [isLogin]);
+
+    // Redirect to /login if the user is not logged in
+    if (!isLogin) {
+        return <Navigate to="/login" replace />;
+    }
 
     const subscribedChannels = [
         { id: 1, name: "Channel 1", avatar: "https://dummyimage.com/100x100" },
@@ -56,6 +95,41 @@ export default function SelfChannelDetail() {
         }));
     };
 
+    const handleFileChange = (e) => {
+        const { name, files } = e.target;
+        setVideoData((prevData) => ({
+            ...prevData,
+            [name]: files[0],
+        }));
+    };
+
+    const handleVideoSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const formData = new FormData();
+        formData.append("title", videoData.title);
+        formData.append("description", videoData.description);
+        formData.append("videoFile", videoData.videoFile);
+        formData.append("thumbnail", videoData.thumbnail);
+
+        try {
+            await axios.post("/api/videos", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                withCredentials: true,
+            });
+            toast.success("Video added successfully!");
+            setIsAddVideoOpen(false);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Error adding video.");
+            console.error("Error uploading video:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleCollectionChange = (e) => {
         const { name, value } = e.target;
         setCollectionData((prevData) => ({
@@ -67,20 +141,6 @@ export default function SelfChannelDetail() {
     const handleTweetChange = (e) => {
         const { value } = e.target;
         setTweetData({ content: value });
-    };
-
-    const handleFileChange = (e) => {
-        const { name, files } = e.target;
-        setVideoData((prevData) => ({
-            ...prevData,
-            [name]: files[0],
-        }));
-    };
-
-    const handleVideoSubmit = (e) => {
-        e.preventDefault();
-        console.log("Video submitted:", videoData);
-        setIsAddVideoOpen(false);
     };
 
     const handleCollectionSubmit = (e) => {
@@ -230,7 +290,7 @@ export default function SelfChannelDetail() {
                                     onChange={handleFileChange}
                                     required
                                     accept="video/*"
-                                    className="w-full text-gray-400"
+                                    className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
                                 />
                             </div>
                             <div>
@@ -241,7 +301,7 @@ export default function SelfChannelDetail() {
                                     onChange={handleFileChange}
                                     required
                                     accept="image/*"
-                                    className="w-full text-gray-400"
+                                    className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
                                 />
                             </div>
                             <div className="flex justify-end space-x-3">

@@ -2,55 +2,35 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
 import { useSidebar } from "../contexts/SidebarContext.jsx";
 import axios from "axios";
+import { useIsLogin } from "../contexts/IsLoginContext.jsx";
 
 export default function Header() {
-    const [isLogin, setIsLogin] = useState(false);
+    const { isLogin, setLoginState } = useIsLogin();
     const [user, setUser] = useState({});
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const navigate = useNavigate();
     const { toggleSidebar } = useSidebar();
-
     const handleSearchToggle = () => setIsSearchVisible((prev) => !prev);
 
     useEffect(() => {
-        const verifyTokens = async () => {
-            const accessToken = Cookies.get("accessToken");
-            const refreshToken = Cookies.get("refreshToken");
-            console.log(accessToken)
-            console.log(refreshToken)
-            if (accessToken) {
-                try {
-                    const decoded = jwtDecode(accessToken);
-                    setUser({ name: decoded.fullName, avatar: decoded.avatar });
-                    setIsLogin(true);
-                } catch (error) {
-                    console.error("Error decoding access token:", error);
-                }
-            } else if (refreshToken) {
-                try {
-                    const response = await axios.post("/api/users/refresh-token", {}, { withCredentials: true });
-                    const { newAccessToken } = response.data;
-
-                    if (newAccessToken) {
-                        Cookies.set("accessToken", newAccessToken);
-                        const decoded = jwtDecode(newAccessToken);
-                        setUser({ name: decoded.fullName, avatar: decoded.avatar });
-                        setIsLogin(true);
-                    } else {
-                        setIsLogin(false);
-                    }
-                } catch (error) {
-                    console.error("Error refreshing access token:", error);
-                    setIsLogin(false);
-                }
+        const fetchCurrentUser = async () => {
+            setLoginState(false);
+            try {
+                const response = await axios.get('/api/users/current-user', {
+                    withCredentials: true, // Important for sending cookies with the request
+                });
+                setUser(response.data.data);
+                // console.log(response.data.data);
+                setLoginState(true);
+            } catch (error) {
+                console.error('Error fetching current user:', error);
+                // Handle errors, e.g., redirect to login or display an error message
             }
         };
 
-        verifyTokens();
+        fetchCurrentUser();
     }, []);
 
     return (
@@ -102,19 +82,19 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* {isLogin && user ? ( */}
+                {isLogin && user ? (
                     <div className="hidden min-[700px]:block">
                         <div className="flex content-center">
                             <div id="username" className="px-3 content-center font-bold">
-                                {user.name}
+                                {user.fullName}
                             </div>
                             <div className="content-center">
                                 <img src={user.avatar} className="h-12 w-12 border-[4px] border-[#e473ff] rounded-xl" alt="avatar" />
                             </div>
                         </div>
                     </div>
-                {/* ) : ( */}
-                    {/* <div className="hidden md:block">
+                ) : (
+                    <div className="hidden md:block">
                         <div className="flex">
                             <button className="px-3 py-2 hover:text-[#e473ff]" onClick={() => navigate("/login")}>
                                 Log in
@@ -126,8 +106,8 @@ export default function Header() {
                                 Sign up
                             </button>
                         </div>
-                    </div> */}
-                {/* )} */}
+                    </div>
+                )}
             </header>
 
             {isSearchVisible && (

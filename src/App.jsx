@@ -1,5 +1,6 @@
 import "./App.css"
 import React from "react";
+import { IsLoginProvider } from './components/contexts/IsLoginContext.jsx';
 import { BrowserRouter, Router, Route, Routes } from "react-router-dom";
 import Master from "./components/layouts/Master";
 import Home from "./components/pages/Home";
@@ -19,22 +20,24 @@ function App() {
 
     return (
         <>
-            <BrowserRouter >
-                <Routes>
-                    <Route path="/" element={<Master />} >
-                        <Route path="/" element={<Home />} />
-                        <Route path="/home" element={<Home />} />
-                        <Route path="/videos" element={<Videos />} />
-                        <Route path="/view-video" element={<VideoDetail />} />
-                        <Route path="/channels" element={<Channels />} />
-                        <Route path="/view-channel" element={<ChannelDetail />} />
+            <IsLoginProvider>
+                <BrowserRouter >
+                    <Routes>
+                        <Route path="/" element={<Master />} >
+                            <Route path="/" element={<Home />} />
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/videos" element={<Videos />} />
+                            <Route path="/view-video" element={<VideoDetail />} />
+                            <Route path="/channels" element={<Channels />} />
+                            <Route path="/view-channel" element={<ChannelDetail />} />
 
-                        <Route path="/my-channel" element={<SelfChannelDetail />} />
-                    </Route>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Routes>
-            </BrowserRouter>
+                            <Route path="/my-channel" element={<SelfChannelDetail />} />
+                        </Route>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </Routes>
+                </BrowserRouter>
+            </IsLoginProvider>
         </>
     )
 }
