@@ -27,7 +27,7 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/home" element={<Home />} />
                             <Route path="/videos" element={<Videos />} />
-                            <Route path="/view-video" element={<VideoDetail />} />
+                            <Route path="/view-video/:videoId" element={<VideoDetail />} />
                             <Route path="/channels" element={<Channels />} />
                             <Route path="/view-channel" element={<ChannelDetail />} />
 

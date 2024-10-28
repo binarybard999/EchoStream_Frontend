@@ -1,20 +1,76 @@
 // src/components/VideoDetail.jsx
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import videojs from "video.js";
+import 'video.js/dist/video-js.css'; // Import video.js CSS
 
 export default function VideoDetail() {
     const { videoId } = useParams(); // Assumes that the route provides a video ID parameter
+    const [video, setVideo] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false); // Track if there's an error
+    const videoRef = useRef(null); // Reference for the video element
+    const playerRef = useRef(null); // Reference for the video.js player
 
-    const video = {
+    useEffect(() => {
+        const fetchVideo = async () => {
+            try {
+                const response = await axios.get(`/api/videos/${videoId}`);
+                setVideo(response.data.statusCode.video); // Set video data from response
+            } catch (err) {
+                console.error("Error fetching video:", err);
+                setError(true); // Set error to true if fetch fails
+            } finally {
+                setLoading(false); // Loading complete
+            }
+        };
+
+        fetchVideo();
+    }, [videoId]);
+
+    useEffect(() => {
+        if (video) {
+            // Initialize the video.js player
+            playerRef.current = videojs(videoRef.current, {
+                controls: true,
+                autoplay: false,
+                preload: 'auto',
+                responsive: true,
+                fluid: true,
+                sources: [{
+                    src: video.videoFile,
+                    type: 'video/mp4' // Specify the video type
+                }]
+            });
+
+            // Cleanup on component unmount
+            // return () => {
+            //     if (playerRef.current) {
+            //         playerRef.current.dispose();
+            //     }
+            // };
+        }
+    }, [video]);
+
+    // Dummy placeholder video data
+    const placeholderVideo = {
         id: videoId,
-        title: "Sample Video Title",
-        channel: "Channel Name",
-        views: "1.2M views",
-        timestamp: "2 days ago",
-        description:
-            "This is a sample description for the video. It contains details about the video content, its creator, and other relevant information.",
+        title: "Video Not Found",
+        channel: "Unknown Channel",
+        views: "N/A",
+        timestamp: "N/A",
+        description: "The video you are looking for does not exist.",
         videoUrl: "https://dummyimage.com/1280x720", // Placeholder URL for the video thumbnail
     };
+
+    // Loading state and error handling
+    if (loading) {
+        return <div className="text-white">Loading...</div>;
+    }
+
+    // If video not found, show placeholder
+    const displayVideo = error || !video ? placeholderVideo : video;
 
     const suggestedVideos = [
         {
@@ -65,30 +121,40 @@ export default function VideoDetail() {
             <div className="flex-grow lg:w-2/3">
                 <div className="mb-5">
                     <div className="aspect-w-16 aspect-h-9">
-                        {/* Replace with a real video player */}
-                        <img
-                            src={video.videoUrl}
-                            alt={video.title}
-                            className="w-full h-full object-cover rounded-lg"
-                        />
+                        {/* Video.js player integration */}
+                        {video && !error ? (
+                            <div data-vjs-player>
+                                <video
+                                    ref={videoRef}
+                                    className="video-js w-full h-full object-cover rounded-lg"
+                                    controls
+                                />
+                            </div>
+                        ) : (
+                            <img
+                                src={displayVideo.videoUrl}
+                                alt={displayVideo.title}
+                                className="w-full h-full object-cover rounded-lg"
+                            />
+                        )}
                     </div>
                 </div>
-                <h1 className="text-2xl font-bold mb-2">{video.title}</h1>
+                <h1 className="text-2xl font-bold mb-2">{displayVideo.title}</h1>
                 <div className="text-gray-400 mb-3">
-                    <span>{video.views} • {video.timestamp}</span>
+                    <span>{displayVideo.views} • {displayVideo.timestamp}</span>
                 </div>
                 <div className="flex items-center mb-5">
                     <img
                         src="https://dummyimage.com/50x50"
-                        alt={video.channel}
+                        alt={displayVideo.channel}
                         className="rounded-full w-10 h-10 object-cover mr-3"
                     />
                     <div>
-                        <h2 className="font-semibold">{video.channel}</h2>
+                        <h2 className="font-semibold">{displayVideo.channel}</h2>
                         <p className="text-sm text-gray-500">1.5M subscribers</p>
                     </div>
                 </div>
-                <p className="text-gray-300 mb-5">{video.description}</p>
+                <p className="text-gray-300 mb-5">{displayVideo.description}</p>
             </div>
 
             {/* Suggested Videos */}
