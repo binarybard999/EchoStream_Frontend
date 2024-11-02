@@ -14,14 +14,14 @@ export default function Home() {
     
     // Dummy channel data
     const channelData = [
-        { id: 1, name: "Channel 1", avatar: channelURL },
-        { id: 2, name: "Channel 2", avatar: channelURL },
-        { id: 3, name: "Channel 3", avatar: channelURL },
-        { id: 4, name: "Channel 4", avatar: channelURL },
-        { id: 5, name: "Channel 5", avatar: channelURL },
-        { id: 6, name: "Channel 6", avatar: channelURL },
-        { id: 7, name: "Channel 7", avatar: channelURL },
-        { id: 8, name: "Channel 8", avatar: channelURL },
+        { _id: 1, name: "Channel 1", avatar: channelURL },
+        { _id: 2, name: "Channel 2", avatar: channelURL },
+        { _id: 3, name: "Channel 3", avatar: channelURL },
+        { _id: 4, name: "Channel 4", avatar: channelURL },
+        { _id: 5, name: "Channel 5", avatar: channelURL },
+        { _id: 6, name: "Channel 6", avatar: channelURL },
+        { _id: 7, name: "Channel 7", avatar: channelURL },
+        { _id: 8, name: "Channel 8", avatar: channelURL },
     ];
 
     useEffect(() => {
@@ -96,7 +96,7 @@ export default function Home() {
                     {channelData.map((channel) => (
                         <Link
                             to="/view-channel"
-                            key={channel.id}
+                            key={channel._id}
                             className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                         >
                             <img
