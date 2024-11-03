@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { userService } from "../../api";
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -20,11 +20,7 @@ export default function Login() {
         setLoading(true);
 
         try {
-            // Set withCredentials to true to include cookies
-            const response = await axios.post("/api/users/login", formData, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true, // Allows cookies in requests and responses
-            });
+            const response = await userService.loginUser(formData); // Call the loginUser function
 
             setLoading(false);
             toast.success("Login successful! Redirecting...");

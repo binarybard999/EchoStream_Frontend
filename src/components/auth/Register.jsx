@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import axios from "axios";
+import { userService } from "../../api"; // Adjust the path based on your project structure
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -36,10 +36,8 @@ export default function Register() {
         if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
 
         try {
-            const response = await axios.post("/api/users/register", formDataToSend, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            console.log(response.data.message);
+            const response = await userService.registerUser(formDataToSend); // Use the service to register
+            console.log(response.data.message); // Display success message
         } catch (error) {
             console.error("Error registering user:", error.response ? error.response.data : error.message);
         }
