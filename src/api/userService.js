@@ -22,21 +22,22 @@ export const registerUser = async (userData) => {
  */
 export const loginUser = async (credentials) => {
     try {
-        const response = await axios.post('/api/users/login', credentials);
+        const response = await axios.post('/api/users/login', credentials, {
+            withCredentials: true, // Include cookies if needed
+        });
         return response.data; // Returns the user data and tokens
     } catch (error) {
         console.error("Failed to log in user:", error);
         throw error; // Rethrow error for handling in the component
     }
 };
-
 /**
  * Log out the current user.
  * @returns {Promise<Object>} - The API response confirming the logout.
  */
 export const logoutUser = async () => {
     try {
-        const response = await axios.post('/api/users/logout');
+        const response = await axios.post("/api/users/logout", {}, { withCredentials: true });
         return response.data; // Returns confirmation of the logout
     } catch (error) {
         console.error("Failed to log out user:", error);

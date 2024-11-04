@@ -5,6 +5,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSidebar } from "../contexts/SidebarContext.jsx";
 import axios from "axios";
 import { useIsLogin } from "../contexts/IsLoginContext.jsx";
+import { userService } from "../../api/index.js";
 
 export default function Header() {
     const { isLogin, setLoginState } = useIsLogin();
@@ -18,10 +19,8 @@ export default function Header() {
         const fetchCurrentUser = async () => {
             setLoginState(false);
             try {
-                const response = await axios.get('/api/users/current-user', {
-                    withCredentials: true, // Important for sending cookies with the request
-                });
-                setUser(response.data.data);
+                const response = await userService.getCurrentUser();
+                setUser(response.data);
                 // console.log(response.data.data);
                 setLoginState(true);
             } catch (error) {

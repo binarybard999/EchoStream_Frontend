@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { userService } from "../../api"; // Adjust the path based on your project structure
+import { FaSpinner } from "react-icons/fa"; // Spinner icon for loading
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -13,6 +17,8 @@ export default function Register() {
         avatar: null,
         coverImage: null,
     });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -26,8 +32,13 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formDataToSend = new FormData();
 
+        if (formData.password !== formData.confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        const formDataToSend = new FormData();
         formDataToSend.append("fullName", formData.fullName);
         formDataToSend.append("username", formData.username);
         formDataToSend.append("email", formData.email);
@@ -35,11 +46,30 @@ export default function Register() {
         if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
         if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
 
+        setLoading(true); // Start loading
+
         try {
-            const response = await userService.registerUser(formDataToSend); // Use the service to register
-            console.log(response.data.message); // Display success message
+            const response = await userService.registerUser(formDataToSend);
+            toast.success(response.message || "User registered successfully!");
+
+            // Clear form after successful registration
+            setFormData({
+                fullName: "",
+                username: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                avatar: null,
+                coverImage: null,
+            });
+
+            // Redirect to the login page
+            navigate("/login");
         } catch (error) {
-            console.error("Error registering user:", error.response ? error.response.data : error.message);
+            toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+            console.error("Error registering user:", error.response ? error.response : error.message);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -68,11 +98,12 @@ export default function Register() {
                 </div>
 
                 {/* Registration Form */}
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
                     <input
                         type="text"
                         name="fullName"
                         placeholder="Full Name"
+                        value={formData.fullName}
                         onChange={handleInputChange}
                         className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                         required
@@ -81,6 +112,7 @@ export default function Register() {
                         type="text"
                         name="username"
                         placeholder="Username"
+                        value={formData.username}
                         onChange={handleInputChange}
                         className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                         required
@@ -89,6 +121,7 @@ export default function Register() {
                         type="email"
                         name="email"
                         placeholder="Email"
+                        value={formData.email}
                         onChange={handleInputChange}
                         className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                         required
@@ -98,6 +131,7 @@ export default function Register() {
                             type="password"
                             name="password"
                             placeholder="Password"
+                            value={formData.password}
                             onChange={handleInputChange}
                             className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                             required
@@ -106,6 +140,7 @@ export default function Register() {
                             type="password"
                             name="confirmPassword"
                             placeholder="Confirm Password"
+                            value={formData.confirmPassword}
                             onChange={handleInputChange}
                             className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                             required
@@ -142,8 +177,9 @@ export default function Register() {
                     <button
                         type="submit"
                         className="w-full bg-[#e473ff] text-white py-4 rounded-lg font-bold hover:bg-[#6e2b7e] transition duration-200"
+                        disabled={loading} // Disable button when loading
                     >
-                        Sign Up
+                        {loading ? <FaSpinner className="animate-spin mx-auto" /> : "Sign Up"}
                     </button>
                 </form>
 

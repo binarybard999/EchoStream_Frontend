@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
+import { userService } from "../../api/index.js";
 
 export default function Sidebar() {
     const { isLogin, setLoginState } = useIsLogin();
@@ -20,7 +21,8 @@ export default function Sidebar() {
     const handleLogoutClick = async () => {
         setLoading(true);
         try {
-            await axios.post("/api/users/logout", {}, { withCredentials: true });
+            // await axios.post("/api/users/logout", {}, { withCredentials: true });
+            await userService.logoutUser();
             setLoginState(false);
             toast.success("Logged out successfully!");
         } catch (error) {

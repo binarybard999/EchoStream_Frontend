@@ -26,13 +26,13 @@ export default function Login() {
             toast.success("Login successful! Redirecting...");
 
             // Check response for status or data needed
-            console.log("Login successful:", response.data);
+            console.log("Login successful:", response);
 
             // Redirect or additional logic can go here
             navigate("/");
         } catch (error) {
             setLoading(false);
-            toast.error(error.response?.data?.message || "Login failed. Please try again.");
+            toast.error(error.response?.message || "Login failed. Please try again.");
         }
     };
 
