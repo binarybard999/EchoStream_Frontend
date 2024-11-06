@@ -11,7 +11,16 @@ import Videos from "./components/pages/Videos";
 import VideoDetail from "./components/pages/VideoDetail";
 import Channels from "./components/pages/Channels";
 import ChannelDetail from "./components/pages/ChannelDetail";
+import Collections from "./components/pages/Collections.jsx";
+import SinglePlaylistView from "./components/pages/SinglePlaylistView.jsx";
+
 import SelfChannelDetail from "./components/user/SelfChannelView";
+import ViewSubscribers from "./components/user/ViewSubscribers.jsx";
+
+import CommunityHub from "./components/pages/CommunityHub.jsx";
+import CreateCommunity from "./components/pages/CreateCommunity.jsx";
+import ExploreCommunities from "./components/pages/ExploreCommunities.jsx";
+import ChatPage from "./components/pages/ChatPage.jsx";
 
 function App() {
 
@@ -30,8 +39,17 @@ function App() {
                             <Route path="/view-video/:videoId" element={<VideoDetail />} />
                             <Route path="/channels" element={<Channels />} />
                             <Route path="/view-channel" element={<ChannelDetail />} />
+                            <Route path="/collections" element={<Collections />} />
+                            <Route path="/playlist/:playListId" element={<SinglePlaylistView />} />
 
                             <Route path="/my-channel" element={<SelfChannelDetail />} />
+                            <Route path="/subscribers" element={<ViewSubscribers />} />
+
+                            <Route path="/community" element={<CommunityHub />} />
+                            <Route path="/create-community" element={<CreateCommunity />} />
+                            <Route path="/explore-communities" element={<ExploreCommunities />} />
+                            <Route path="/community/communityId" element={<ChatPage />} />
+
                         </Route>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

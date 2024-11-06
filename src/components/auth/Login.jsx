@@ -62,7 +62,7 @@ export default function Login() {
                     />
                     <button
                         type="submit"
-                        className="w-full bg-[#e473ff] text-white font-bold py-4 rounded-lg hover:bg-[#6e2b7e] transition duration-200 flex items-center justify-center"
+                        className="w-full bg-[#e473ff] text-black font-bold py-4 rounded-lg hover:bg-[#6e2b7e] transition duration-200 flex items-center justify-center"
                         disabled={loading}
                     >
                         {loading ? <FaSpinner className="animate-spin mr-2" /> : "Login"}

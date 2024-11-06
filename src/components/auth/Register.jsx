@@ -155,7 +155,7 @@ export default function Register() {
                                 type="file"
                                 name="avatar"
                                 onChange={handleFileChange}
-                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
+                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-black file:font-bold hover:file:bg-[#6e2b7e]"
                                 accept="image/*"
                                 required
                             />
@@ -166,7 +166,7 @@ export default function Register() {
                                 type="file"
                                 name="coverImage"
                                 onChange={handleFileChange}
-                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
+                                className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-black file:font-bold hover:file:bg-[#6e2b7e]"
                                 accept="image/*"
                                 required
                             />
@@ -176,7 +176,7 @@ export default function Register() {
                     {/* Register Button */}
                     <button
                         type="submit"
-                        className="w-full bg-[#e473ff] text-white py-4 rounded-lg font-bold hover:bg-[#6e2b7e] transition duration-200"
+                        className="w-full bg-[#e473ff] text-black py-4 rounded-lg font-bold hover:bg-[#6e2b7e] transition duration-200"
                         disabled={loading} // Disable button when loading
                     >
                         {loading ? <FaSpinner className="animate-spin mx-auto" /> : "Sign Up"}

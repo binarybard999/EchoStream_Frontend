@@ -107,7 +107,7 @@ export default function Sidebar() {
                     ) : (
                         <button
                             onClick={handleLoginClick}
-                            className="w-full py-2 px-5 bg-[#da4cfd] rounded-xl hover:bg-[#6e2b7e] text-white flex justify-center items-center"
+                            className="w-full py-2 px-5 bg-[#da4cfd] rounded-xl hover:bg-[#6e2b7e] text-black font-bold flex justify-center items-center"
                         >
                             <FontAwesomeIcon icon="fa-solid fa-sign-in-alt" className="w-5 h-5 mr-2" />
                             Login/Signup
