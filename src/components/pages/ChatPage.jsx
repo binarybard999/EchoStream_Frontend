@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { socket } from "../../utils/socket.js";
+import { initializeSocket, joinCommunityRoom, leaveCommunityRoom, onNewMessage } from "../../utils/socket";
 import { communityService } from "../../api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,28 +13,31 @@ export default function ChatPage() {
     const [video, setVideo] = useState(null);
     const [community, setCommunity] = useState(null);
 
-    // useEffect(() => {
-    //     const fetchCommunityDetails = async () => {
-    //         try {
-    //             const response = await communityService.getCommunityById(communityId);
-    //             setCommunity(response.data);
-    //         } catch (error) {
-    //             toast.error("Failed to fetch community details.");
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchCommunityDetails = async () => {
+            try {
+                const response = await communityService.getCommunityById(communityId);
+                setCommunity(response.data);
+            } catch (error) {
+                toast.error("Failed to fetch community details.");
+            }
+        };
 
-    //     fetchCommunityDetails();
+        fetchCommunityDetails();
 
-    //     socket.emit("joinCommunity", communityId);
+        // Initialize socket and join community room
+        const socket = initializeSocket();
+        joinCommunityRoom(communityId);
 
-    //     socket.on("newMessage", (message) => {
-    //         setMessages((prevMessages) => [...prevMessages, message]);
-    //     });
+        // Listen for new messages
+        onNewMessage((message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
 
-    //     return () => {
-    //         socket.emit("leaveCommunity", communityId);
-    //     };
-    // }, [communityId]);
+        return () => {
+            leaveCommunityRoom(communityId);
+        };
+    }, [communityId]);
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
@@ -45,10 +48,14 @@ export default function ChatPage() {
     const sendMessage = () => {
         if (!newMessage.trim() && !image && !video) return;
 
-        const messageData = { communityId, content: newMessage };
-        if (image) messageData.image = image;
-        if (video) messageData.video = video;
+        const messageData = {
+            communityId,
+            content: newMessage,
+            image: image || null,
+            video: video || null,
+        };
 
+        // Emit the message through the socket
         socket.emit("sendMessage", messageData);
 
         // Clear message and file inputs
@@ -71,6 +78,7 @@ export default function ChatPage() {
                 <h1 className="text-3xl font-semibold">{community?.name || "Community Name"}</h1>
             </div>
 
+            {/* Chat Messages */}
             <div className="bg-[#1a1a1d] rounded-lg p-4 h-[70vh] overflow-y-auto">
                 {messages.map((msg, index) => (
                     <div key={index} className="mb-2">
@@ -86,6 +94,7 @@ export default function ChatPage() {
                 ))}
             </div>
 
+            {/* Message Input and File Uploads */}
             <div className="mt-4 flex flex-col space-y-2">
                 <input
                     type="text"
