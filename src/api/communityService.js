@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const baseUrl = '/api/communities';
+const baseUrl = '/api/community';
 
 /** Community Management Functions **/
 // 1. Create a new community
 export const createCommunity = async (data) => {
     try {
-        const response = await axios.post(`${baseUrl}`, data, { withCredentials: true });
+        const response = await axios.post(baseUrl, data, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error creating community:", error);
