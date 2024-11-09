@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// const api = axios.create({
+//     baseURL: import.meta.env.VITE_API_BASE_URL, // Environment-based base URL
+//     withCredentials: true,
+// });
+
 const baseUrl = '/api/community';
 
 /** Community Management Functions **/

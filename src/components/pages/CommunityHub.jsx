@@ -18,7 +18,7 @@ export default function CommunityHub() {
                         onClick={() => navigate("/create-community")}
                     >
                         <FontAwesomeIcon icon={faPlusCircle} className="text-4xl text-[#e473ff] mb-4" />
-                        <h2 className="text-2xl font-bold">Create a Community</h2>
+                        <h2 className="text-2xl font-bold text-center">Create a Community</h2>
                     </div>
 
                     {/* Explore Communities */}
@@ -27,7 +27,7 @@ export default function CommunityHub() {
                         onClick={() => navigate("/explore-communities")}
                     >
                         <FontAwesomeIcon icon={faCompass} className="text-4xl text-[#e473ff] mb-4" />
-                        <h2 className="text-2xl font-bold">Explore Communities</h2>
+                        <h2 className="text-2xl font-bold text-center">Explore Communities</h2>
                     </div>
                 </div>
             </div>

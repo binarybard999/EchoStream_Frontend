@@ -48,7 +48,7 @@ function App() {
                             <Route path="/community" element={<CommunityHub />} />
                             <Route path="/create-community" element={<CreateCommunity />} />
                             <Route path="/explore-communities" element={<ExploreCommunities />} />
-                            <Route path="/community/communityId" element={<ChatPage />} />
+                            <Route path="/community/:communityId" element={<ChatPage />} />
 
                         </Route>
                         <Route path="/login" element={<Login />} />

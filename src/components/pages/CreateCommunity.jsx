@@ -8,6 +8,7 @@ export default function CreateCommunity() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [avatar, setAvatar] = useState(null);
+    const [loading, setLoading] = useState(false); // Loader state
     const navigate = useNavigate();
 
     const handleFileChange = (e) => {
@@ -24,19 +25,38 @@ export default function CreateCommunity() {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("description", description);
-        if (avatar) {
-            formData.append("avatar", avatar);
-        }
+        // Create JSON payload for text-based fields
+        const communityData = {
+            name,
+            description,
+        };
+
+        setLoading(true); // Start loader
 
         try {
-            const response = await communityService.createCommunity(formData);
-            toast.success("Community created successfully!");
-            navigate(`/community/${response.data.communityId}`);
+            // Create community without avatar initially
+            const response = await communityService.createCommunity(communityData);
+            const communityId = response.data._id;
+
+            console.log(response);
+            console.log(communityId);
+
+            // If avatar is provided, upload it separately
+            if (avatar) {
+                const avatarData = new FormData();
+                avatarData.append("avatar", avatar);
+                await communityService.addCommunityAvatar(communityId, avatarData);
+            }
+            setName("");
+            setDescription("");
+            toast.success("Community created successfully! redirecting...");
+            setTimeout(() => {
+                navigate(`/community/${response.data.communityId}`);
+            }, 2000);
         } catch (error) {
             toast.error("Failed to create community.");
+        } finally {
+            setLoading(false); // Stop loader
         }
     };
 
@@ -71,9 +91,13 @@ export default function CreateCommunity() {
                     </label>
                     <button
                         type="submit"
-                        className="w-full bg-[#e473ff] text-black py-4 rounded-lg font-bold hover:bg-[#6e2b7e] transition duration-200"
+                        className={`w-full text-black py-4 rounded-lg font-bold transition duration-200 ${loading
+                            ? "bg-[#6e2b7e] cursor-not-allowed"
+                            : "bg-[#e473ff] hover:bg-[#6e2b7e]"
+                            }`}
+                        disabled={loading}
                     >
-                        Create Community
+                        {loading ? "Creating..." : "Create Community"}
                     </button>
                 </form>
             </div>

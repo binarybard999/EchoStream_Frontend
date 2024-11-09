@@ -16,7 +16,7 @@ export default function ChatPage() {
     useEffect(() => {
         const fetchCommunityDetails = async () => {
             try {
-                const response = await communityService.getCommunityById(communityId);
+                const response = await communityService.getCommunityDetails(communityId);
                 setCommunity(response.data);
             } catch (error) {
                 toast.error("Failed to fetch community details.");
