@@ -8,7 +8,7 @@ let socket;
  */
 export const initializeSocket = () => {
     if (!socket) {
-        socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:8000', {
+        socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000', {
             transports: ['websocket'],
             withCredentials: true,
         });

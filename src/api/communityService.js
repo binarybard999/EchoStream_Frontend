@@ -217,6 +217,8 @@ export const deleteCommunityMedia = async (communityId) => {
 export const getCommunityDetails = async (communityId) => {
     try {
         const response = await axios.get(`${baseUrl}/${communityId}`, { withCredentials: true });
+        // console.log(response);
+        // console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error getting community details:", error);

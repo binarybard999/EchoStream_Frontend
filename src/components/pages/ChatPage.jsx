@@ -9,14 +9,16 @@ export default function ChatPage() {
     const { communityId } = useParams();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
-    const [image, setImage] = useState(null);
-    const [video, setVideo] = useState(null);
-    const [community, setCommunity] = useState(null);
+    const [image, setImage] = useState({});
+    const [video, setVideo] = useState({});
+    const [community, setCommunity] = useState({});
 
     useEffect(() => {
         const fetchCommunityDetails = async () => {
             try {
+                // console.log(communityId);
                 const response = await communityService.getCommunityDetails(communityId);
+                // console.log(response.data);
                 setCommunity(response.data);
             } catch (error) {
                 toast.error("Failed to fetch community details.");
