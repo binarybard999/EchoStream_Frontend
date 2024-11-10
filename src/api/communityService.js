@@ -71,6 +71,28 @@ export const joinCommunity = async (communityId) => {
     }
 };
 
+// 5.1. Check if the user is already a member of a community
+export const checkMembership = async (communityId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/${communityId}/check-membership`, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error checking community membership:", error);
+        throw error;
+    }
+};
+
+// 5.2 get user joined communities
+export const getUserJoinedCommunities = async () => {
+    try {
+        const response = await axios.get('/api/community/joined', { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching joined communities:", error);
+        throw error;
+    }
+};
+
 // 6. Leave a community
 export const leaveCommunity = async (communityId) => {
     try {
