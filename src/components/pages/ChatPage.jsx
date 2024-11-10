@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { initializeSocket, joinCommunityRoom, leaveCommunityRoom, onNewMessage } from "../../utils/socket";
 import { communityService } from "../../api";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ChatPage() {
     const { communityId } = useParams();
+    const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [image, setImage] = useState(null);
@@ -36,11 +37,8 @@ export default function ChatPage() {
             setLoading(true);
             try {
                 const response = await communityService.getCommunityChats(communityId, page);
-
-                // Ensure `docs` is defined before calling `.reverse()`
                 const chats = response?.data?.docs ? response.data.docs.reverse() : [];
-
-                setMessages(prevMessages => [...chats, ...prevMessages]);
+                setMessages((prevMessages) => [...chats, ...prevMessages]);
                 setLoading(false);
             } catch (error) {
                 toast.error("Failed to fetch messages.");
@@ -53,7 +51,7 @@ export default function ChatPage() {
         joinCommunityRoom(communityId);
 
         onNewMessage((message) => {
-            setMessages(prevMessages => [message, ...prevMessages]);
+            setMessages((prevMessages) => [...prevMessages, message]);
         });
 
         return () => {
@@ -73,22 +71,27 @@ export default function ChatPage() {
         if (!newMessage.trim() && !image && !video) return;
 
         const messageData = {
-            communityId,
             content: newMessage,
-            image: image || null,
-            video: video || null,
+            image: image ? URL.createObjectURL(image) : null,  // Replace with actual URL if uploaded
+            video: video ? URL.createObjectURL(video) : null,  // Replace with actual URL if uploaded
         };
 
-        socket.emit("sendMessage", messageData);
-
-        setNewMessage("");
-        setImage(null);
-        setVideo(null);
+        try {
+            const response = await communityService.sendMessage(communityId, messageData);
+            socket.emit("sendMessage", response);
+            setMessages((prevMessages) => [...prevMessages, response]);
+            setNewMessage("");
+            setImage(null);
+            setVideo(null);
+        } catch (error) {
+            toast.error("Failed to send message.");
+        }
     };
+
 
     const loadMoreChats = () => {
         if (!loading) {
-            setPage(prevPage => prevPage + 1);
+            setPage((prevPage) => prevPage + 1);
         }
     };
 
@@ -105,6 +108,7 @@ export default function ChatPage() {
         try {
             await communityService.leaveCommunity(communityId);
             toast.success("Left the community.");
+            navigate("/explore-communities");
         } catch (error) {
             toast.error("Failed to leave the community.");
         }
@@ -259,7 +263,6 @@ export default function ChatPage() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }
