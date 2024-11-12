@@ -66,17 +66,17 @@ export default function ExploreCommunities() {
                     <div className="loader">Loading...</div>
                 </div>
             ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                     {communities.length > 0 ? (
                         communities.map((community) => (
-                            <div key={community._id} className="bg-[#262626] rounded-lg p-4">
+                            <div key={community._id} className="bg-[#262626] rounded-lg p-4 text-center">
                                 <h2 className="text-xl font-bold">{community.name}</h2>
                                 <p className="text-gray-400 mb-4">{community.description}</p>
-                                <div className="flex space-x-2">
+                                <div className="flex space-x-2 justify-center">
                                     <button
                                         className={`py-2 px-4 rounded-md transition ${isCommunityJoined(community._id)
-                                            ? "bg-gray-500 cursor-not-allowed"
-                                            : "bg-[#e473ff] hover:bg-[#6e2b7e] text-white"
+                                            ? "bg-[#6e2b7e] cursor-not-allowed text-black font-bold"
+                                            : "bg-[#e473ff] hover:bg-[#6e2b7e] text-black font-bold"
                                             }`}
                                         onClick={() => !isCommunityJoined(community._id) && handleJoinCommunity(community._id)}
                                         disabled={isCommunityJoined(community._id)}
@@ -86,7 +86,7 @@ export default function ExploreCommunities() {
                                     {/* Navigate to Chat Page button */}
                                     {isCommunityJoined(community._id) && (
                                         <button
-                                            className="bg-[#e473ff] hover:bg-[#6e2b7e] text-white py-2 px-4 rounded-md transition"
+                                            className="bg-[#e473ff] hover:bg-[#6e2b7e] text-black font-bold py-2 px-4 rounded-md transition"
                                             onClick={() => navigate(`/community/${community._id}`)}
                                         >
                                             Go to Chat

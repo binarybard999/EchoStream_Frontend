@@ -20,10 +20,16 @@ export default function ChatPage() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const chatBoxRef = useRef(null);
-
-    const socket = initializeSocket();
+    const socketRef = useRef(null);  // Socket reference to prevent re-initialization
 
     useEffect(() => {
+        // Initialize and join the community room only once
+        if (!socketRef.current) {
+            socketRef.current = initializeSocket();
+            joinCommunityRoom(communityId);
+        }
+
+        // Fetch community details and initial chats
         const fetchCommunityDetails = async () => {
             try {
                 const response = await communityService.getCommunityDetails(communityId);
@@ -39,23 +45,25 @@ export default function ChatPage() {
                 const response = await communityService.getCommunityChats(communityId, page);
                 const chats = response?.data?.docs ? response.data.docs.reverse() : [];
                 setMessages((prevMessages) => [...chats, ...prevMessages]);
-                setLoading(false);
             } catch (error) {
                 toast.error("Failed to fetch messages.");
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchCommunityDetails();
         fetchCommunityChats();
-        joinCommunityRoom(communityId);
 
+        // Listen for new messages
         onNewMessage((message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         });
 
+        // Cleanup on unmount
         return () => {
             leaveCommunityRoom(communityId);
+            socketRef.current = null;
         };
     }, [communityId, page]);
 
@@ -72,15 +80,15 @@ export default function ChatPage() {
 
         const messageData = {
             content: newMessage,
-            image: image ? URL.createObjectURL(image) : null,  // Replace with actual URL if uploaded
-            video: video ? URL.createObjectURL(video) : null,  // Replace with actual URL if uploaded
+            image: image ? URL.createObjectURL(image) : null,
+            video: video ? URL.createObjectURL(video) : null,
         };
 
         try {
             const response = await communityService.sendMessage(communityId, messageData);
-            socket.emit("sendMessage", response);
+            socketRef.current.emit("sendMessage", response);  // Emit saved message
             setMessages((prevMessages) => [...prevMessages, response]);
-            setNewMessage("");
+            setNewMessage("");  // Clear inputs
             setImage(null);
             setVideo(null);
         } catch (error) {
@@ -88,6 +96,12 @@ export default function ChatPage() {
         }
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
 
     const loadMoreChats = () => {
         if (!loading) {
@@ -211,6 +225,7 @@ export default function ChatPage() {
                     <input
                         type="text"
                         value={newMessage}
+                        onKeyDown={handleKeyPress}
                         onChange={(e) => setNewMessage(e.target.value)}
                         className="w-full bg-[#262626] text-white p-3 rounded-lg focus:outline-none"
                         placeholder="Type your message..."
