@@ -80,19 +80,22 @@ export default function ChatPage() {
 
         const messageData = {
             content: newMessage,
-            image: image ? URL.createObjectURL(image) : null,
-            video: video ? URL.createObjectURL(video) : null,
+            image: image || null,  // Send file object or null, if available
+            video: video || null,
         };
 
         try {
-            const response = await communityService.sendMessage(communityId, messageData);
-            socketRef.current.emit("sendMessage", response);  // Emit saved message
+            const response = await communityService.sendMessage(communityId, messageData); // Save message to DB
+            socket.emit("sendMessage", response); // Broadcast to other users
+            // Add new message to chat
             setMessages((prevMessages) => [...prevMessages, response]);
-            setNewMessage("");  // Clear inputs
-            setImage(null);
-            setVideo(null);
         } catch (error) {
             toast.error("Failed to send message.");
+        } finally {
+            // Clear input fields regardless of success or failure
+            setNewMessage("");
+            setImage(null);
+            setVideo(null);
         }
     };
 
@@ -175,18 +178,43 @@ export default function ChatPage() {
                 }}
             >
                 {loading && <p className="text-center text-gray-400">Loading...</p>}
-                {messages.map((msg, index) => (
-                    <div key={index} className="mb-2">
-                        <span className="font-bold">{msg.username}</span>: {msg.content}
-                        {msg.image && <img src={msg.image} alt="Attached" className="mt-2 w-32 rounded" />}
-                        {msg.video && (
-                            <video controls className="mt-2 w-32 rounded">
-                                <source src={msg.video} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
-                        )}
-                    </div>
-                ))}
+                {messages
+                    .filter((msg) => msg.content || msg.image || msg.video) // Skip empty messages
+                    .map((msg, index) => (
+                        <div key={index} className="flex items-start mb-4">
+                            {/* Sender Avatar */}
+                            <img
+                                src={msg.avatar || "\\public\\userIcon.png"}
+                                alt={`${msg.username || "Unknown User"} avatar`}
+                                className="w-10 h-10 rounded-full mr-3"
+                            />
+                            <div>
+                                {/* Username and Timestamp */}
+                                <div className="flex items-center">
+                                    <span className="font-semibold text-sm text-[#e473ff]">
+                                        {msg.username || "Unknown User"}
+                                    </span>
+                                    <span className="text-xs text-gray-500 ml-2">
+                                        {new Date(msg.createdAt).toLocaleTimeString()}
+                                    </span>
+                                </div>
+
+                                {/* Message Content */}
+                                <div className="bg-[#262626] text-white p-3 rounded-lg mt-1 shadow-md max-w-xs">
+                                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                                    {msg.image && (
+                                        <img src={msg.image} alt="Attached" className="mt-2 w-full h-auto rounded-lg" />
+                                    )}
+                                    {msg.video && (
+                                        <video controls className="mt-2 w-full h-auto rounded-lg">
+                                            <source src={msg.video} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
             </div>
 
             {/* Message Input and File Uploads */}
