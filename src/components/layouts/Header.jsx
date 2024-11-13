@@ -87,9 +87,9 @@ export default function Header() {
                             <div id="username" className="px-3 content-center font-bold">
                                 {user.fullName}
                             </div>
-                            <div className="content-center">
+                            <Link className="content-center" to="/settings">
                                 <img src={user.avatar} className="h-12 w-12 border-[4px] border-[#e473ff] rounded-xl" alt="avatar" />
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 ) : (
