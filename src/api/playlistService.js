@@ -47,6 +47,35 @@ export const getPlaylistById = async (playlistId) => {
 };
 
 /**
+ * Get all playlist
+ * @returns {Promise<Object>} - The all playlist details
+ */
+export const getAllPlaylists = async () => {
+    try {
+        const response = await axios.get(`/api/playlists`, { withCredentials: true });
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching playlist by ID:", error);
+        throw error;
+    }
+};
+
+/**
+ * Get current user playlist
+ * @returns {Promise<Object>} - returns the current user playlist details
+ */
+export const getCurrentUserPlaylists = async () => {
+    try {
+        const response = await axios.get("/api/playlists/my-playlists", { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch current user's playlists:", error);
+        throw error;
+    }
+};
+
+/**
  * Add a video to a playlist
  * @param {String} playlistId - The ID of the playlist
  * @param {String} videoId - The ID of the video to add
