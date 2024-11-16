@@ -161,3 +161,17 @@ export const getWatchHistory = async () => {
         throw error; // Rethrow error for handling in the component
     }
 };
+
+/**
+ * Get the all users.
+ * @returns {Promise<Object>} - The API response containing all users data.
+ */
+export const fetchUsers = async () => {
+    try {
+        const response = await axios.get('/api/users/allusers');
+        return response.data; // Returns all users data
+    } catch (error) {
+        console.error("Failed to fetch current user:", error);
+        throw error; // Rethrow error for handling in the component
+    }
+};

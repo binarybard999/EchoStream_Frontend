@@ -39,7 +39,7 @@ function App() {
                             <Route path="/videos" element={<Videos />} />
                             <Route path="/view-video/:videoId" element={<VideoDetail />} />
                             <Route path="/channels" element={<Channels />} />
-                            <Route path="/view-channel" element={<ChannelDetail />} />
+                            <Route path="/view-channel/:channelId" element={<ChannelDetail />} />
                             <Route path="/collections" element={<Collections />} />
                             <Route path="/playlist/:playListId" element={<SinglePlaylistView />} />
                             <Route path="/settings" element={<SettingsPage />} />
