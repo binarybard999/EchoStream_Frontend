@@ -72,7 +72,7 @@ export default function SelfChannelDetail() {
     const tabs = ["Videos", "Collections", "Tweets", "Subscribed"];
 
     const handleEditProfile = () => {
-        navigate("/profile-settings");
+        navigate("/settings");
     };
 
     const handleAddVideoToggle = () => {

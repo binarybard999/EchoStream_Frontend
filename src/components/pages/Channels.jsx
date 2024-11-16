@@ -56,7 +56,7 @@ export default function Channels() {
                     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {channels.slice(0, 4).map((channel) => (
                             <Link
-                                to={`/view-channel/${channel._id}`}
+                                to={`/c/${channel.username}`}
                                 key={channel._id}
                                 className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                             >
@@ -80,7 +80,7 @@ export default function Channels() {
                     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {channels.map((channel) => (
                             <Link
-                                to={`/view-channel/${channel._id}`}
+                                to={`/c/${channel.username}`}
                                 key={channel._id}
                                 className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                             >

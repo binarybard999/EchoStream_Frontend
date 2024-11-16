@@ -83,7 +83,7 @@ export default function Home() {
                     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {topVideos.map((video) => (
                             <Link
-                                to={`/view-video/${video._id}`}
+                                to={`/v/${video._id}`}
                                 key={video._id}
                                 className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                             >
@@ -141,7 +141,7 @@ export default function Home() {
                     <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
                         {channels.map((channel) => (
                             <Link
-                                to={`/view-channel/${channel._id}`}
+                                to={`/c/${channel.username}`}
                                 key={channel._id}
                                 className="flex flex-col items-center text-center text-white hover:bg-[#1c1d1f] p-3 rounded-lg shadow-lg"
                             >
@@ -177,7 +177,7 @@ export default function Home() {
                     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {videos.slice(4).map((video) => (
                             <Link
-                                to={`/view-video/${video._id}`}
+                                to={`/v/${video._id}`}
                                 key={video._id}
                                 className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                             >

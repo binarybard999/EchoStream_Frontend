@@ -37,9 +37,9 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/home" element={<Home />} />
                             <Route path="/videos" element={<Videos />} />
-                            <Route path="/view-video/:videoId" element={<VideoDetail />} />
+                            <Route path="/v/:videoId" element={<VideoDetail />} />
                             <Route path="/channels" element={<Channels />} />
-                            <Route path="/view-channel/:channelId" element={<ChannelDetail />} />
+                            <Route path="/c/:username" element={<ChannelDetail />} />
                             <Route path="/collections" element={<Collections />} />
                             <Route path="/playlist/:playListId" element={<SinglePlaylistView />} />
                             <Route path="/settings" element={<SettingsPage />} />

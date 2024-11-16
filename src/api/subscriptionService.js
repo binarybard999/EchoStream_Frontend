@@ -6,13 +6,9 @@ import axios from 'axios';
  * @param {Object} user - The user object containing user details (typically includes user ID).
  * @returns {Promise<Object>} - The API response with the success message.
  */
-export const toggleSubscription = async (channelId, user) => {
+export const toggleSubscription = async (channelId) => {
     try {
-        const response = await axios.post(`/api/subscriptions/c/${channelId}`, {}, {
-            headers: {
-                Authorization: `Bearer ${user.token}`, // Use the user's token for authentication
-            },
-        });
+        const response = await axios.post(`/api/subscriptions/c/${channelId}`);
         return response.data; // Returns the response from the API
     } catch (error) {
         console.error("Failed to toggle subscription:", error);

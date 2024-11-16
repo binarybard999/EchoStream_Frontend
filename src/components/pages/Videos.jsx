@@ -61,7 +61,7 @@ export default function Videos() {
                     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {videos.slice(0, 4).map((video) => (
                             <Link
-                                to={`/view-video/${video._id}`}
+                                to={`/v/${video._id}`}
                                 key={video._id}
                                 className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                             >
@@ -101,7 +101,7 @@ export default function Videos() {
                     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {videos.slice(4).map((video) => (
                             <Link
-                                to={`/view-video/${video._id}`}
+                                to={`/v/${video._id}`}
                                 key={video._id}
                                 className="hover:bg-[#1c1d1f] p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 max-w-sm mx-auto"
                             >
