@@ -49,10 +49,14 @@ export const publishVideo = async (videoData, files) => {
 export const getVideoById = async (videoId) => {
     try {
         const response = await axios.get(`/api/videos/${videoId}`);
-        return response.data; // Returns the video data
+        // console.log(response.data);
+        if (response.status !== 200 || !response.data) {
+            throw new Error("Video not found.");
+        }
+        return response.data; // Return the video data
     } catch (error) {
-        console.error("Failed to fetch video by ID:", error);
-        throw error; // Rethrow error for handling in the component
+        console.error("Failed to fetch video by ID:", error.message);
+        throw error; // Rethrow the error for handling in the component
     }
 };
 
