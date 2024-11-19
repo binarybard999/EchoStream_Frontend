@@ -13,7 +13,7 @@ import Channels from "./components/pages/Channels";
 import ChannelDetail from "./components/pages/ChannelDetail";
 import Collections from "./components/pages/Collections.jsx";
 import SinglePlaylistView from "./components/pages/SinglePlaylistView.jsx";
-import SettingsPage from "./components/pages/SettingsPage.jsx";
+import SettingsPage from "./components/user/SettingsPage.jsx";
 
 import SelfChannelDetail from "./components/user/SelfChannelView";
 import ViewSubscribers from "./components/user/ViewSubscribers.jsx";

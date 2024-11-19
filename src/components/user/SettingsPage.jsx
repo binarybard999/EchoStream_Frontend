@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { userService } from "../../api";  // Assume userService handles API calls
+import { userService } from "../../api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +13,7 @@ export default function SettingsPage() {
         avatar: "",
         coverImage: "",
         password: "",
+        description: "", // Added description
     });
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
@@ -20,7 +21,7 @@ export default function SettingsPage() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await userService.getCurrentUser();  // Fetch user data from backend
+                const response = await userService.getCurrentUser();
                 setUser(response.data);
             } catch (error) {
                 toast.error("Failed to load user data.");
@@ -46,11 +47,12 @@ export default function SettingsPage() {
         formData.append("email", user.email);
         formData.append("fullName", user.fullName);
         formData.append("password", user.password);
+        formData.append("description", user.description); // Append description
         if (avatarFile) formData.append("avatar", avatarFile);
         if (coverFile) formData.append("coverImage", coverFile);
 
         try {
-            const response = await userService.updateAccountDetails(formData);  // Update user data on backend
+            const response = await userService.updateAccountDetails(formData);
             setUser(response.data);
             toast.success("Profile updated successfully!");
         } catch (error) {
@@ -82,7 +84,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="flex w-full space-x-6">
-                    {/* Avatar Image */}
+                    {/* Avatar */}
                     <div className="relative flex">
                         <img
                             src={avatarFile ? URL.createObjectURL(avatarFile) : user.avatar}
@@ -144,6 +146,17 @@ export default function SettingsPage() {
                                 className="w-full bg-[#262626] text-white p-3 rounded-lg focus:outline-none"
                                 placeholder="Full Name"
                                 required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400">Description</label>
+                            <textarea
+                                name="description"
+                                value={user.description}
+                                onChange={handleInputChange}
+                                className="w-full bg-[#262626] text-white p-3 rounded-lg focus:outline-none resize-none"
+                                rows="3"
+                                placeholder="Add a description about yourself"
                             />
                         </div>
                         <div>
