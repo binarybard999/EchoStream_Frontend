@@ -21,6 +21,13 @@ export default function Login() {
 
         try {
             const response = await userService.loginUser(formData); // Call the loginUser function
+            const { fullName, username, avatar, coverImage } = response.data.user;
+
+            // Store user data in localStorage
+            localStorage.setItem("FullName", fullName);
+            localStorage.setItem("Username", username);
+            localStorage.setItem("Avatar", avatar);
+            localStorage.setItem("CoverImage", coverImage);
 
             setLoading(false);
             toast.success("Login successful! Redirecting...");

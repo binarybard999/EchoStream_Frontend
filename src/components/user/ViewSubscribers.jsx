@@ -9,7 +9,7 @@ export default function ViewSubscribers() {
     useEffect(() => {
         const fetchSubscribers = async () => {
             try {
-                const response = await subscriptionService.getSubscribers();
+                const response = await subscriptionService.getUserChannelSubscribers();
                 setSubscribers(response.data);
             } catch (error) {
                 toast.error("Failed to load subscribers.");

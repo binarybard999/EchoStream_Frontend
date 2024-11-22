@@ -23,6 +23,7 @@ export default function Sidebar() {
         try {
             // await axios.post("/api/users/logout", {}, { withCredentials: true });
             await userService.logoutUser();
+            localStorage.clear();
             setLoginState(false);
             toast.success("Logged out successfully!");
         } catch (error) {
