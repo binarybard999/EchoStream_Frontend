@@ -103,7 +103,7 @@ export default function VideoDetail() {
                         {new Date(displayVideo.createdAt).toLocaleDateString()}
                     </span>
                 </div>
-                <Link className="flex items-center mb-5" to={`/c/${displayVideo.owner?._id}`}>
+                <Link className="flex items-center mb-5" to={`/c/${displayVideo.owner?.username}`}>
                     <img
                         src={displayVideo.owner?.avatar || "https://dummyimage.com/50x50"}
                         alt={displayVideo.owner?.username || displayVideo.channel}

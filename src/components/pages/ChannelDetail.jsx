@@ -9,6 +9,7 @@ export default function ChannelDetail() {
     const { username } = useParams(); // Get the username from the URL
     const navigate = useNavigate(); // For redirection
     const [channel, setChannel] = useState({});
+    const [currentUser, setCurrentUser] = useState({});
     const [isFollowing, setIsFollowing] = useState(false);
     const [isOwnChannel, setIsOwnChannel] = useState(false); // Check if it's the logged-in user's channel
     const [activeTab, setActiveTab] = useState("Videos");
@@ -19,12 +20,17 @@ export default function ChannelDetail() {
         const fetchChannelDetails = async () => {
             try {
                 const response = await userService.getUserChannelProfile(username);
+                const user = await userService.getCurrentUser();
                 setChannel(response.data);
+                setCurrentUser(user.data);
+                // console.log(user.data);
+                
+                // Check if the current user owns this channel
+                const loggedInUserId = user.data.username; // Replace with your auth method
+                setIsOwnChannel(loggedInUserId === response.data.username);
+                
                 setIsFollowing(response.data.isSubscribed);
 
-                // Check if the current user owns this channel
-                const loggedInUserId = localStorage.getItem("userId"); // Replace with your auth method
-                setIsOwnChannel(loggedInUserId === response.data._id);
             } catch (error) {
                 toast.error("Failed to load channel details.");
             }
