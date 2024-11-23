@@ -156,7 +156,7 @@ export default function ChatPage() {
                     onClick={handleMenuToggle}
                 />
                 {showMenu && (
-                    <div className="absolute right-0 top-12 bg-[#262626] rounded-md shadow-lg p-2 w-48">
+                    <div className="absolute right-10 top-28 bg-[#262626] rounded-md shadow-lg p-2 w-48">
                         <button
                             className="block w-full px-4 py-2 hover:bg-[#333333] text-left"
                             onClick={() => navigate(`/community/${communityId}`)}

@@ -15,7 +15,7 @@ import Collections from "./components/pages/Collections.jsx";
 import SinglePlaylistView from "./components/pages/SinglePlaylistView.jsx";
 import SettingsPage from "./components/user/SettingsPage.jsx";
 
-import SelfChannelDetail from "./components/user/SelfChannelView";
+import SelfChannelDetail from "./components/user/SelfChannelDetail.jsx";
 import ViewSubscribers from "./components/user/ViewSubscribers.jsx";
 
 import CommunityHub from "./components/pages/CommunityHub.jsx";
