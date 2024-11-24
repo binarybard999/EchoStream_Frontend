@@ -3,9 +3,11 @@ import { videoService } from "../../../api"; // Adjust the import as per your pr
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaSpinner } from "react-icons/fa";
+import { FiEdit, FiToggleLeft, FiToggleRight } from "react-icons/fi";
 
 export default function VideoSection() {
     const [isAddVideoOpen, setIsAddVideoOpen] = useState(false);
+    const [isEditVideoOpen, setIsEditVideoOpen] = useState(false);
     const [videoData, setVideoData] = useState({
         title: "",
         description: "",
@@ -19,27 +21,10 @@ export default function VideoSection() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const categories = [
-        "coding",
-        "sports",
-        "gaming",
-        "music",
-        "news",
-        "travel",
-        "food",
-        "education",
-        "lifestyle",
-        "technology",
-        "fitness",
-        "health",
-        "fashion",
-        "art",
-        "photography",
-        "finance",
-        "history",
-        "movies",
-        "science",
-        "books",
-        "nature",
+        "coding", "sports", "gaming", "music", "news", "travel",
+        "food", "education", "lifestyle", "technology", "fitness",
+        "health", "fashion", "art", "photography", "finance",
+        "history", "movies", "science", "books", "nature",
     ];
 
     useEffect(() => {
@@ -64,7 +49,6 @@ export default function VideoSection() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        // console.log(e.target.value);
         setVideoData((prevData) => ({ ...prevData, [name]: value }));
     };
 
@@ -111,10 +95,30 @@ export default function VideoSection() {
         }
     };
 
+    const handleEditVideo = (videoId) => {
+        toast.info(`Edit functionality for video ${videoId} not implemented.`);
+    };
+
+    const handleTogglePublishStatus = async (videoId, currentStatus) => {
+        try {
+            await videoService.togglePublishStatus(videoId);
+            const updatedVideos = videos.map((video) =>
+                video._id === videoId ? { ...video, isPublished: !currentStatus } : video
+            );
+            setVideos(updatedVideos);
+            toast.success(
+                `Video has been ${currentStatus ? "unpublished" : "published"}.`
+            );
+        } catch (error) {
+            toast.error("Failed to toggle publish status.");
+            console.error("Error toggling publish status:", error);
+        }
+    };
+
     return (
         <div>
             <div className="flex justify-between items-center mb-5">
-                <p className="text-gray-300">This is where your videos will be displayed.</p>
+                <p className="text-gray-300">Your videos are listed below.</p>
                 <button
                     onClick={toggleAddVideoPopup}
                     className="bg-[#e473ff] text-black font-bold px-3 py-2 rounded-md"
@@ -128,19 +132,48 @@ export default function VideoSection() {
                     <FaSpinner className="text-gray-400 animate-spin text-3xl" />
                 </div>
             ) : (
-                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                <ul className="space-y-4">
                     {videos.map((video) => (
-                        <div key={video._id} className="bg-[#1a1a1d] p-4 rounded-lg shadow-lg">
-                            <img
-                                src={video.thumbnail}
-                                alt={video.title}
-                                className="w-full h-48 object-cover rounded-lg"
-                            />
-                            <h3 className="text-lg font-bold mt-2">{video.title}</h3>
-                            <p className="text-gray-400">{video.description}</p>
-                        </div>
+                        <li
+                            key={video._id}
+                            className="flex items-center justify-between bg-[#1a1a1d] p-4 rounded-lg shadow-lg"
+                        >
+                            <div className="flex items-center space-x-4">
+                                <img
+                                    src={video.thumbnail}
+                                    alt={video.title}
+                                    className="w-24 h-16 object-cover rounded-lg"
+                                />
+                                <div>
+                                    <h3 className="text-lg font-bold">{video.title}</h3>
+                                    <p className="text-gray-400 text-sm">{video.description}</p>
+                                    <p className="text-gray-500 text-xs">
+                                        {video.category} | Tags: {video.tags.join(", ")}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                                <button
+                                    onClick={() => handleEditVideo(video._id)}
+                                    className="text-blue-500 hover:text-blue-700"
+                                >
+                                    <FiEdit size={25} />
+                                </button>
+                                <button
+                                    onClick={() => handleTogglePublishStatus(video._id, video.isPublished)}
+                                    className={`${video.isPublished ? "text-green-500" : "text-red-500"
+                                        } hover:text-gray-700`}
+                                >
+                                    {video.isPublished ? (
+                                        <FiToggleRight size={25} />
+                                    ) : (
+                                        <FiToggleLeft size={25} />
+                                    )}
+                                </button>
+                            </div>
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
 
             {isAddVideoOpen && (
