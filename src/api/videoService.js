@@ -87,7 +87,8 @@ export const updateVideo = async (videoId, videoData, thumbnailFile) => {
     // Append fields to the form data
     if (videoData.title) formData.append("title", videoData.title);
     if (videoData.description) formData.append("description", videoData.description);
-    if (videoData.categories) formData.append("categories", videoData.categories.join(","));
+    if (videoData.category) formData.append("category", videoData.category);
+    // if (videoData.categories) formData.append("categories", videoData.categories.join(","));
     if (videoData.tags) formData.append("tags", videoData.tags.join(","));
     if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
 

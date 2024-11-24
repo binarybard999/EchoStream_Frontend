@@ -19,6 +19,7 @@ export default function VideoSection() {
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [editVideoId, setEditVideoId] = useState(null); // Track which video is being edited
 
     const categories = [
         "coding", "sports", "gaming", "music", "news", "travel",
@@ -45,7 +46,11 @@ export default function VideoSection() {
         fetchUserVideos();
     }, []);
 
-    const toggleAddVideoPopup = () => setIsAddVideoOpen((prev) => !prev);
+    const toggleAddVideoPopup = () => {
+        resetVideoForm();
+        setIsAddVideoOpen((prev) => !prev);
+    }
+    const toggleEditVideoPopup = () => setIsEditVideoOpen((prev) => !prev);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -57,8 +62,9 @@ export default function VideoSection() {
         setVideoData((prevData) => ({ ...prevData, [name]: files[0] }));
     };
 
-    const handleVideoSubmit = async (e) => {
+    const handleAddVideo = async (e) => {
         e.preventDefault();
+        resetVideoForm();
         setIsSubmitting(true);
 
         const formData = {
@@ -75,28 +81,56 @@ export default function VideoSection() {
 
         try {
             await videoService.publishVideo(formData, files);
-            toast.success("Video published successfully!");
+            toast.success("Video added successfully!");
             toggleAddVideoPopup();
-            setVideoData({
-                title: "",
-                description: "",
-                category: "",
-                tags: "",
-                videoFile: null,
-                thumbnail: null,
-            });
-            const response = await videoService.getUserVideos(); // Refresh video list
-            setVideos(response.data);
+            resetVideoForm();
+            refreshVideos();
         } catch (error) {
-            toast.error("Failed to publish video.");
-            console.error("Error publishing video:", error);
+            toast.error("Failed to add video.");
+            console.error("Error adding video:", error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const handleEditVideo = (videoId) => {
-        toast.info(`Edit functionality for video ${videoId} not implemented.`);
+    const handleEditVideo = (video) => {
+        setEditVideoId(video._id); // Store video ID to edit
+        setVideoData({
+            title: video.title,
+            description: video.description,
+            category: video.category || "", // Keep the current category
+            tags: video.tags.join(", "), // Convert array to string
+            thumbnail: null, // Existing thumbnail cannot be re-uploaded
+        });
+        toggleEditVideoPopup();
+    };
+
+    const handleUpdateVideo = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        const formData = {
+            title: videoData.title,
+            description: videoData.description,
+            category: videoData.category,
+            tags: videoData.tags.split(",").map((tag) => tag.trim()),
+        };
+
+        const files = {
+            thumbnail: videoData.thumbnail,
+        };
+
+        try {
+            await videoService.updateVideo(editVideoId, formData, files);
+            toast.success("Video updated successfully!");
+            toggleEditVideoPopup();
+            refreshVideos();
+        } catch (error) {
+            toast.error("Failed to update video.");
+            console.error("Error updating video:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleTogglePublishStatus = async (videoId, currentStatus) => {
@@ -113,6 +147,26 @@ export default function VideoSection() {
             toast.error("Failed to toggle publish status.");
             console.error("Error toggling publish status:", error);
         }
+    };
+
+    const refreshVideos = async () => {
+        try {
+            const response = await videoService.getUserVideos();
+            setVideos(response.data);
+        } catch (error) {
+            console.error("Error refreshing videos:", error);
+        }
+    };
+
+    const resetVideoForm = () => {
+        setVideoData({
+            title: "",
+            description: "",
+            category: "",
+            tags: "",
+            videoFile: null,
+            thumbnail: null,
+        });
     };
 
     return (
@@ -154,7 +208,7 @@ export default function VideoSection() {
                             </div>
                             <div className="flex items-center space-x-3">
                                 <button
-                                    onClick={() => handleEditVideo(video._id)}
+                                    onClick={() => handleEditVideo(video)}
                                     className="text-blue-500 hover:text-blue-700"
                                 >
                                     <FiEdit size={25} />
@@ -180,7 +234,7 @@ export default function VideoSection() {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-[#1c1d1f] p-5 rounded-lg shadow-lg max-w-lg w-full">
                         <h2 className="text-xl font-bold mb-4">Add Video</h2>
-                        <form onSubmit={handleVideoSubmit} className="space-y-4">
+                        <form onSubmit={handleAddVideo} className="space-y-4">
                             <div>
                                 <label className="block text-gray-400 mb-1">Video Title</label>
                                 <input
@@ -266,6 +320,91 @@ export default function VideoSection() {
                                     className="bg-[#e473ff] text-black font-bold px-4 py-2 rounded-md"
                                 >
                                     {isSubmitting ? "Uploading..." : "Submit"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {isEditVideoOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-[#1c1d1f] p-5 rounded-lg shadow-lg max-w-lg w-full">
+                        <h2 className="text-xl font-bold mb-4">Edit Video</h2>
+                        <form onSubmit={handleUpdateVideo} className="space-y-4">
+                            <div>
+                                <label className="block text-gray-400 mb-1">Video Title</label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={videoData.title}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full bg-[#2a2a2d] text-white p-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-400 mb-1">Description</label>
+                                <textarea
+                                    name="description"
+                                    value={videoData.description}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full bg-[#2a2a2d] text-white p-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label className="block text-gray-400 mb-1">Category</label>
+                                <select
+                                    name="category"
+                                    value={videoData.category}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full bg-[#2a2a2d] text-white p-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                                >
+                                    <option value="">Select Category</option>
+                                    {categories.map((category) => (
+                                        <option key={category} value={category}>
+                                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-gray-400 mb-1">Tags (comma-separated)</label>
+                                <input
+                                    type="text"
+                                    name="tags"
+                                    value={videoData.tags}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full bg-[#2a2a2d] text-white p-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-400 mb-1">Thumbnail</label>
+                                <input
+                                    type="file"
+                                    name="thumbnail"
+                                    onChange={handleFileChange}
+                                    accept="image/*"
+                                    className="block w-full mt-2 text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#e473ff] file:text-white hover:file:bg-[#6e2b7e]"
+                                />
+                            </div>
+                            <div className="flex justify-end space-x-3">
+                                <button
+                                    type="button"
+                                    onClick={toggleEditVideoPopup}
+                                    className="px-4 py-2 text-gray-400 border border-gray-600 rounded-md"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="bg-[#e473ff] text-black font-bold px-4 py-2 rounded-md"
+                                >
+                                    {isSubmitting ? "Updating..." : "Update"}
                                 </button>
                             </div>
                         </form>
