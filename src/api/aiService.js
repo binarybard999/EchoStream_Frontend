@@ -1,18 +1,15 @@
 import axios from "axios";
 
-// AI Service to interact with the backend
+/**
+ * Fetch AI-generated content for a video.
+ * @param {Object} videoData - Video data including title, description, tags, and category.
+ * @returns {Promise<Object>} - The AI-generated content.
+ */
 export const fetchAiGeneratedContent = async (videoData) => {
     try {
-        const response = await axios.post(
-            "/api/ai/generate",
-            {
-                title: videoData.title,
-                description: videoData.description,
-                tags: videoData.tags,
-                category: videoData.category,
-            },
-            { withCredentials: true }
-        );
+        const response = await axios.post("/api/ai/generate", videoData, {
+            headers: { "Content-Type": "application/json" },
+        });
         return response.data;
     } catch (error) {
         console.error("Error fetching AI-generated content:", error);
