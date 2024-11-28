@@ -12,7 +12,8 @@ export default function SettingsPage() {
         fullName: "",
         avatar: "",
         coverImage: "",
-        password: "",
+        oldPassword: "",
+        newPassword: "",
         description: "", // Added description
     });
     const [avatarFile, setAvatarFile] = useState(null);
@@ -46,7 +47,8 @@ export default function SettingsPage() {
         formData.append("username", user.username);
         formData.append("email", user.email);
         formData.append("fullName", user.fullName);
-        formData.append("password", user.password);
+        formData.append("oldPassword", user.oldPassword);
+        formData.append("newPassword", user.newPassword);
         formData.append("description", user.description); // Append description
         if (avatarFile) formData.append("avatar", avatarFile);
         if (coverFile) formData.append("coverImage", coverFile);
@@ -160,16 +162,29 @@ export default function SettingsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-400">Password</label>
+                            <label className="block text-gray-400">Old Password</label>
                             <div className="relative">
                                 <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3 text-gray-400" />
                                 <input
                                     type="password"
-                                    name="password"
-                                    value={user.password}
+                                    name="oldPassword"
+                                    value={user.oldPassword}
                                     onChange={handleInputChange}
                                     className="w-full bg-[#262626] text-white p-3 pl-10 rounded-lg focus:outline-none"
-                                    placeholder="Password"
+                                    placeholder="Old Password"
+                                    required
+                                />
+                            </div>
+                            <label className="block text-gray-400">New Password</label>
+                            <div className="relative">
+                                <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3 text-gray-400" />
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    value={user.newPassword}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-[#262626] text-white p-3 pl-10 rounded-lg focus:outline-none"
+                                    placeholder="New Password"
                                     required
                                 />
                             </div>

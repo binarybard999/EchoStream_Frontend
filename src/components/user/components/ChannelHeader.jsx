@@ -23,6 +23,7 @@ export default function ChannelHeader({ channel, onEditProfile }) {
                     <h1 className="text-2xl font-bold">{channel.name}</h1>
                     <p className="text-gray-400">{channel.username}</p>
                     <p className="text-gray-400">{channel.subscribers} | {channel.subscribed}</p>
+                    <p className="text-gray-400">{channel.description}</p>
                 </div>
                 <button
                     onClick={onEditProfile}

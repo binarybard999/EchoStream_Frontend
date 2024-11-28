@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { userService } from "../../api";
 
 export default function Login() {
-    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [formData, setFormData] = useState({ identifier: "", password: "" }); // Change email to identifier
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -50,12 +50,12 @@ export default function Login() {
                 <h2 className="text-3xl font-semibold text-center text-white mb-6">Login</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
+                        type="text"
+                        name="identifier"
+                        placeholder="Email or Username"
                         className="w-full bg-[#262626] text-white p-4 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e473ff]"
                         onChange={handleInputChange}
-                        value={formData.email}
+                        value={formData.identifier}
                         required
                     />
                     <input

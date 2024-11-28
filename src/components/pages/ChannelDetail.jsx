@@ -22,7 +22,7 @@ export default function ChannelDetail() {
                 setChannel(response.data);
                 
                 // Check if the current user owns this channel
-                const loggedInUsername = localStorage.getItem("Username"); // Replace with your auth method
+                const loggedInUsername = localStorage.getItem("Username");
                 setIsOwnChannel(loggedInUsername === response.data.username);
                 
                 setIsFollowing(response.data.isSubscribed);

@@ -19,6 +19,7 @@ export default function SelfChannelDetail() {
         subscribed: "",
         coverImage: "",
         avatar: "",
+        description: "",
     });
     const { isLogin } = useIsLogin();
 
@@ -36,6 +37,7 @@ export default function SelfChannelDetail() {
                     subscribed: `${userData.channelsSubscribedToCount || 0} subscribed`,
                     coverImage: userData.coverImage,
                     avatar: userData.avatar,
+                    description: userData.description || "",
                 });
             } catch (error) {
                 console.error("Error fetching user data:", error);
