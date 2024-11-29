@@ -2,7 +2,7 @@
 
 This is the frontend for the EchoStream Project.
 
-[Here is the Backend](https://github.com/binarybard999)
+[Here is the Backend](https://github.com/binarybard999/EchoStream)
 
 <!-- Currently, two official plugins are available:
 
