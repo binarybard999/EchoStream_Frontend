@@ -36,8 +36,8 @@ export const getUserVideos = async () => {
  */
 export const publishVideo = async (videoData, files) => {
     const formData = new FormData();
-    formData.append('videoFile', files.videoFile[0]);
-    formData.append('thumbnail', files.thumbnail[0]);
+    formData.append('videoFile', files.videoFile);
+    formData.append('thumbnail', files.thumbnail);
     for (const key in videoData) {
         formData.append(key, videoData[key]);
     }

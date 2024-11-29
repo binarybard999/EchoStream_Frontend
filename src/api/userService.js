@@ -61,7 +61,8 @@ export const refreshAccessToken = async () => {
 
 /**
  * Change the current user's password.
- * @param {Object} passwordData - The data containing the current and new passwords.
+ * @param {String} oldPassword - The current password.
+ * @param {String} newPassword - The new password.
  * @returns {Promise<Object>} - The API response confirming the password change.
  */
 export const changeCurrentPassword = async (passwordData) => {
@@ -90,16 +91,27 @@ export const getCurrentUser = async () => {
 
 /**
  * Update account details for the current user.
- * @param {Object} accountData - The data containing updated account details (e.g., username, email).
+ * @param {FormData} accountData - The data containing updated account details and files.
+ * @param {Object} passwordData - Contains old and new passwords for validation.
  * @returns {Promise<Object>} - The API response confirming the account update.
  */
-export const updateAccountDetails = async (accountData) => {
+export const updateAccountDetails = async (accountData, passwordData) => {
     try {
-        const response = await axios.patch('/api/users/update-account', accountData);
-        return response.data; // Returns confirmation of the account update
+        if (passwordData.oldPassword && passwordData.newPassword) {
+            console.log(passwordData.oldPassword);
+            console.log(passwordData.newPassword);
+            if (passwordData.oldPassword === passwordData.newPassword) {
+                throw new Error("New password cannot be the same as the old password.");
+            }
+            await changeCurrentPassword(passwordData);
+        }
+
+        // Send the account update request
+        const response = await axios.patch("/api/users/update-account", accountData);
+        return response.data;
     } catch (error) {
         console.error("Failed to update account details:", error);
-        throw error; // Rethrow error for handling in the component
+        throw error;
     }
 };
 

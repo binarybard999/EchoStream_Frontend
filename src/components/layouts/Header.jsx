@@ -41,7 +41,8 @@ export default function Header() {
                     </div>
 
                     <Link to="/" className="px-3 content-center cursor-pointer">
-                        <img src="https://imgs.search.brave.com/KOOIgb6PSGsZwAt4KikyG-HW-RvOhyZyLvc2oV8BKTQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bG9nb2pveS5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjAx/MTEzMTEyMzE1L1J1/dGhsZXNzX2NvbXBy/ZXNzZWQuanBn" className="w-[48px] h-[48px] rounded-xl object-cover" alt="EchoStream" />
+                        {/* <img src="https://imgs.search.brave.com/KOOIgb6PSGsZwAt4KikyG-HW-RvOhyZyLvc2oV8BKTQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bG9nb2pveS5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjAx/MTEzMTEyMzE1L1J1/dGhsZXNzX2NvbXBy/ZXNzZWQuanBn" className="w-[48px] h-[48px] rounded-xl object-cover" alt="EchoStream" /> */}
+                        <img src="/logo.jpg" className="w-[48px] h-[48px] rounded-xl object-cover" alt="EchoStream" />
                     </Link>
 
                     <Link to="/" className="content-center cursor-pointer font-bold">

@@ -14,7 +14,7 @@ export default function SettingsPage() {
         coverImage: "",
         oldPassword: "",
         newPassword: "",
-        description: "", // Added description
+        description: "",
     });
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
@@ -43,18 +43,25 @@ export default function SettingsPage() {
     };
 
     const handleSave = async () => {
-        const formData = new FormData();
-        formData.append("username", user.username);
-        formData.append("email", user.email);
-        formData.append("fullName", user.fullName);
-        formData.append("oldPassword", user.oldPassword);
-        formData.append("newPassword", user.newPassword);
-        formData.append("description", user.description); // Append description
-        if (avatarFile) formData.append("avatar", avatarFile);
-        if (coverFile) formData.append("coverImage", coverFile);
+        const accountData = {
+            username: user.username,
+            email: user.email,
+            fullName: user.fullName,
+            description: user.description,
+            avatar: avatarFile || null,
+            coverImage: coverFile || null,
+        };
 
+        const passwordData = {
+            oldPassword: user.oldPassword,
+            newPassword: user.newPassword,
+        }
+        // console.log("FormData contents:");
+        // for (const pair of formData.entries()) {
+        //     console.log(`${pair[0]}: ${pair[1]}`);
+        // }
         try {
-            const response = await userService.updateAccountDetails(formData);
+            const response = await userService.updateAccountDetails(accountData, passwordData);
             setUser(response.data);
             toast.success("Profile updated successfully!");
         } catch (error) {

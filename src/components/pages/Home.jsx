@@ -101,7 +101,10 @@ export default function Home() {
                                         className="w-8 h-8 rounded-full mr-3"
                                     />
                                     <div>
-                                        <h2 className="text-white text-lg font-semibold truncate">
+                                        <h2
+                                            className="text-white text-lg font-semibold mt-3 truncate overflow-hidden text-ellipsis whitespace-nowrap"
+                                            title={video.title}
+                                        >
                                             {video.title}
                                         </h2>
                                         <p className="text-gray-400 text-sm">{video.ownerDetails?.username || "Unknown Channel"}</p>
@@ -183,17 +186,29 @@ export default function Home() {
                             >
                                 <div className="aspect-w-16 aspect-h-9">
                                     <img
-                                        src={video.thumbnail || thumbnailURL}
+                                        src={video.thumbnail || "https://dummyimage.com/640x360"}
                                         alt={video.title}
                                         className="w-full h-full object-cover rounded-lg"
                                     />
                                 </div>
-                                <h2 className="text-white text-lg font-semibold mt-3 truncate">
-                                    {video.title}
-                                </h2>
-                                <p className="text-gray-400 text-sm">{video.channel || "Unknown Channel"}</p>
-                                <p className="text-gray-500 text-sm">
-                                    {video.views || "0 views"} • {video.createdAt || "Just now"}
+                                <div className="flex items-center mt-2">
+                                    <img
+                                        src={video.ownerDetails?.avatar || "https://dummyimage.com/100x100"}
+                                        alt={video.ownerDetails?.username || "Unknown User"}
+                                        className="w-8 h-8 rounded-full mr-3"
+                                    />
+                                    <div>
+                                        <h2
+                                            className="text-white text-lg font-semibold mt-3 truncate overflow-hidden text-ellipsis whitespace-nowrap"
+                                            title={video.title}
+                                        >
+                                            {video.title}
+                                        </h2>
+                                        <p className="text-gray-400 text-sm">{video.ownerDetails?.username || "Unknown Channel"}</p>
+                                    </div>
+                                </div>
+                                <p className="text-gray-500 text-sm mt-1">
+                                    {video.views || "0 views"} • {new Date(video.createdAt).toLocaleDateString()}
                                 </p>
                             </Link>
                         ))}
