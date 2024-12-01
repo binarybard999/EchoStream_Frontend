@@ -26,8 +26,8 @@ export default function AnonymousCommunity() {
                 sanitizedUsername
             );
 
-            // Navigate to the community chat page with the sanitized community name
-            navigate(`/anonymous/${sanitizedCommunityName}`);
+            // Navigate to the community chat page with the sanitized community name and username as query params
+            navigate(`/anonymous/${sanitizedCommunityName}?username=${sanitizedUsername}`);
             toast.success(response.message || "Successfully joined the community!");
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to join or create the community.");

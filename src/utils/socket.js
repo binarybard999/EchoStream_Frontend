@@ -70,11 +70,12 @@ export const onNewMessage = (callback) => {
  */
 export const joinAnonCommunityRoom = (communityName, username) => {
     if (socket) {
-        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
-        socket.emit("joinAnonCommunity", { communityName: sanitizedCommunityName, username });
-        console.log(`Joined anonymous community: ${sanitizedCommunityName} as ${username}`);
+        socket.emit("joinAnonCommunity", { communityName, username });
+        console.log(
+            `Joined anonymous community: ${communityName} as ${username}`
+        );
     } else {
-        console.warn("Socket not initialized. Call initializeSocket() first.");
+        console.warn("Socket not initialized.");
     }
 };
 
@@ -101,13 +102,12 @@ export const sendAnonMessage = (communityName, username, content) => {
  */
 export const leaveAnonCommunityRoom = (communityName, username) => {
     if (socket) {
-        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
-        socket.emit("leaveAnonCommunity", { communityName: sanitizedCommunityName, username });
-        console.log(`Left anonymous community: ${sanitizedCommunityName} as ${username}`);
+        socket.emit("leaveAnonCommunity", { communityName, username });
+        console.log(`Left anonymous community: ${communityName}`);
     } else {
-        console.warn("Socket not initialized. Call initializeSocket() first.");
+        console.warn("Socket not initialized.");
     }
-};
+}
 
 /**
  * Set up a listener for new messages in the anonymous community room.
@@ -117,7 +117,7 @@ export const onNewAnonMessage = (callback) => {
     if (socket) {
         socket.on("newAnonMessage", callback);
     } else {
-        console.warn("Socket not initialized. Call initializeSocket() first.");
+        console.warn("Socket not initialized.");
     }
 };
 
