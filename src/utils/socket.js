@@ -4,7 +4,7 @@ let socket;
 
 /**
  * Initialize a socket connection if it doesn't already exist.
- * @returns {Socket} - The initialized Socket.IO client instance.
+ * @returns {socket} - The initialized Socket.IO client instance.
  */
 export const initializeSocket = () => {
     if (!socket) {
@@ -58,6 +58,88 @@ export const leaveCommunityRoom = (communityId) => {
 export const onNewMessage = (callback) => {
     if (socket) {
         socket.on("newMessage", callback);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Join an anonymous community room.
+ * @param {string} communityName - The community name (from URL).
+ * @param {string} username - The anonymous username.
+ */
+export const joinAnonCommunityRoom = (communityName, username) => {
+    if (socket) {
+        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
+        socket.emit("joinAnonCommunity", { communityName: sanitizedCommunityName, username });
+        console.log(`Joined anonymous community: ${sanitizedCommunityName} as ${username}`);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Send an anonymous message.
+ * @param {string} communityName - The community name (from URL).
+ * @param {string} username - The anonymous username.
+ * @param {string} content - The message content.
+ */
+export const sendAnonMessage = (communityName, username, content) => {
+    if (socket) {
+        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
+        socket.emit("sendAnonMessage", { communityName: sanitizedCommunityName, username, content });
+        console.log(`Message sent to ${sanitizedCommunityName} by ${username}:`, content);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Leave an anonymous community room.
+ * @param {string} communityName - The community name (from URL).
+ * @param {string} username - The anonymous username.
+ */
+export const leaveAnonCommunityRoom = (communityName, username) => {
+    if (socket) {
+        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
+        socket.emit("leaveAnonCommunity", { communityName: sanitizedCommunityName, username });
+        console.log(`Left anonymous community: ${sanitizedCommunityName} as ${username}`);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Set up a listener for new messages in the anonymous community room.
+ * @param {Function} callback - Function to execute when a new message is received.
+ */
+export const onNewAnonMessage = (callback) => {
+    if (socket) {
+        socket.on("newAnonMessage", callback);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Set up a listener for user join events in the anonymous community room.
+ * @param {Function} callback - Function to execute when a user joins the community.
+ */
+export const onUserJoined = (callback) => {
+    if (socket) {
+        socket.on("userJoined", callback);
+    } else {
+        console.warn("Socket not initialized. Call initializeSocket() first.");
+    }
+};
+
+/**
+ * Set up a listener for user leave events in the anonymous community room.
+ * @param {Function} callback - Function to execute when a user leaves the community.
+ */
+export const onUserLeft = (callback) => {
+    if (socket) {
+        socket.on("userLeft", callback);
     } else {
         console.warn("Socket not initialized. Call initializeSocket() first.");
     }

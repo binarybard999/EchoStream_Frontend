@@ -22,6 +22,8 @@ import CommunityHub from "./components/pages/CommunityHub.jsx";
 import CreateCommunity from "./components/pages/CreateCommunity.jsx";
 import ExploreCommunities from "./components/pages/ExploreCommunities.jsx";
 import ChatPage from "./components/pages/ChatPage.jsx";
+import AnonymousCommunity from "./components/pages/AnonymousCommunity.jsx";
+import AnonymousChatPage from "./components/pages/AnonymousChatPage.jsx";
 
 function App() {
 
@@ -51,7 +53,8 @@ function App() {
                             <Route path="/create-community" element={<CreateCommunity />} />
                             <Route path="/explore-communities" element={<ExploreCommunities />} />
                             <Route path="/community/:communityId" element={<ChatPage />} />
-
+                            <Route path="/anonymous-community" element={<AnonymousCommunity />} />
+                            <Route path="/anonymous/:communityName" element={<AnonymousChatPage />} />
                         </Route>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

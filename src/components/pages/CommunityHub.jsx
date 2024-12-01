@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faPlusCircle, faCompass } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faPlusCircle, faCompass, faMask } from "@fortawesome/free-solid-svg-icons"; // Added faMask for anonymous community
 import { useNavigate } from "react-router-dom";
 
 export default function CommunityHub() {
@@ -11,7 +11,7 @@ export default function CommunityHub() {
             <div className="w-full max-w-4xl bg-[#1a1a1d] rounded-lg shadow-lg p-8">
                 <h1 className="text-3xl font-semibold text-center mb-6">Community Hub</h1>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {/* Create Community */}
                     <div
                         className="bg-[#262626] rounded-lg p-6 flex flex-col items-center cursor-pointer"
@@ -28,6 +28,15 @@ export default function CommunityHub() {
                     >
                         <FontAwesomeIcon icon={faCompass} className="text-4xl text-[#e473ff] mb-4" />
                         <h2 className="text-2xl font-bold text-center">Explore Communities</h2>
+                    </div>
+
+                    {/* Join Anonymous Community */}
+                    <div
+                        className="bg-[#262626] rounded-lg p-6 flex flex-col items-center cursor-pointer"
+                        onClick={() => navigate("/anonymous-community")}
+                    >
+                        <FontAwesomeIcon icon={faMask} className="text-4xl text-[#e473ff] mb-4" />
+                        <h2 className="text-2xl font-bold text-center">Join Anonymous Community</h2>
                     </div>
                 </div>
             </div>
