@@ -25,6 +25,7 @@ export default function VideoDetail() {
                 console.log(videoData);
                 setVideo(videoData.statusCode.video);
                 setRelatedVideos(videoData.statusCode.relatedVideos || []); // Set related videos if available
+                console.log(videoData.statusCode.relatedVideos);
             } catch (err) {
                 setError(true);
                 toast.error("Failed to load video.");

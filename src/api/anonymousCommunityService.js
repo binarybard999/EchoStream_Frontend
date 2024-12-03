@@ -4,6 +4,13 @@ import axios from "axios";
 const API_BASE_URL = "/api/anonymous-community";
 
 /**
+ * Sanitize a string by trimming, replacing spaces with underscores, and converting to lowercase.
+ * @param {string} input - The input string to sanitize.
+ * @returns {string} - The sanitized string.
+ */
+const sanitizeInput = (input) => input.trim().replace(/\s+/g, "_").toLowerCase();
+
+/**
  * Join or create an anonymous community.
  * @param {string} communityName - The name of the community.
  * @param {string} username - The anonymous username.
@@ -11,8 +18,8 @@ const API_BASE_URL = "/api/anonymous-community";
  */
 export const createOrJoinAnonCommunity = async (communityName, username) => {
     try {
-        const sanitizedCommunityName = communityName.trim().replace(/\s+/g, "_").toLowerCase();
-        const sanitizedUsername = username.trim().replace(/\s+/g, "_").toLowerCase();
+        const sanitizedCommunityName = sanitizeInput(communityName);
+        const sanitizedUsername = sanitizeInput(username);
 
         const response = await axios.post(`${API_BASE_URL}/join`, {
             communityName: sanitizedCommunityName,
@@ -39,8 +46,8 @@ export const sendAnonMessage = async (communityName, username, content) => {
             throw new Error("Message content cannot be empty.");
         }
 
-        const sanitizedCommunityName = communityName.trim().replace(/\s+/g, "_").toLowerCase();
-        const sanitizedUsername = username.trim().replace(/\s+/g, "_").toLowerCase();
+        const sanitizedCommunityName = sanitizeInput(communityName);
+        const sanitizedUsername = sanitizeInput(username);
 
         const response = await axios.post(`${API_BASE_URL}/message`, {
             communityName: sanitizedCommunityName,

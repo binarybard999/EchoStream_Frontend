@@ -25,6 +25,8 @@ export const initializeSocket = () => {
     return socket;
 };
 
+// === Normal Community Functions ===
+
 /**
  * Join a specific community room for real-time interactions.
  * @param {String} communityId - The ID of the community to join.
@@ -63,6 +65,8 @@ export const onNewMessage = (callback) => {
     }
 };
 
+// === Anonymous Community Functions ===
+
 /**
  * Join an anonymous community room.
  * @param {string} communityName - The community name (from URL).
@@ -70,12 +74,11 @@ export const onNewMessage = (callback) => {
  */
 export const joinAnonCommunityRoom = (communityName, username) => {
     if (socket) {
-        socket.emit("joinAnonCommunity", { communityName, username });
-        console.log(
-            `Joined anonymous community: ${communityName} as ${username}`
-        );
+        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
+        socket.emit("joinAnonCommunity", { communityName: sanitizedCommunityName, username });
+        console.log(`Joined anonymous community: ${sanitizedCommunityName} as ${username}`);
     } else {
-        console.warn("Socket not initialized.");
+        console.warn("Socket not initialized. Call initializeSocket() first.");
     }
 };
 
@@ -102,12 +105,13 @@ export const sendAnonMessage = (communityName, username, content) => {
  */
 export const leaveAnonCommunityRoom = (communityName, username) => {
     if (socket) {
-        socket.emit("leaveAnonCommunity", { communityName, username });
-        console.log(`Left anonymous community: ${communityName}`);
+        const sanitizedCommunityName = communityName.replace(/\s+/g, "_").toLowerCase();
+        socket.emit("leaveAnonCommunity", { communityName: sanitizedCommunityName, username });
+        console.log(`Left anonymous community: ${sanitizedCommunityName}`);
     } else {
-        console.warn("Socket not initialized.");
+        console.warn("Socket not initialized. Call initializeSocket() first.");
     }
-}
+};
 
 /**
  * Set up a listener for new messages in the anonymous community room.
@@ -117,7 +121,7 @@ export const onNewAnonMessage = (callback) => {
     if (socket) {
         socket.on("newAnonMessage", callback);
     } else {
-        console.warn("Socket not initialized.");
+        console.warn("Socket not initialized. Call initializeSocket() first.");
     }
 };
 

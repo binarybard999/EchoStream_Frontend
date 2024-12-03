@@ -16,8 +16,12 @@ export default function AnonymousChatPage() {
     const params = new URLSearchParams(location.search);
     const providedUsername = params.get("username") || "anonymous";
 
-    // Append a random string to ensure uniqueness
-    const username = useRef(`${providedUsername}_${Math.random().toString(36).substring(7)}`);
+    // Ensure a unique username by appending a random suffix
+    const username = useRef(
+        providedUsername.trim().replace(/\s+/g, "_").toLowerCase() +
+        `_${Math.random().toString(36).substring(7)}`
+    );
+
     const socketRef = useRef(null);
 
     useEffect(() => {
@@ -34,9 +38,10 @@ export default function AnonymousChatPage() {
         joinAnonCommunityRoom(communityName, username.current);
 
         // Listen for new messages broadcasted by the server
-        onNewAnonMessage((message) => {
+        const handleNewMessage = (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
-        });
+        };
+        onNewAnonMessage(handleNewMessage);
 
         // Cleanup on component unmount
         return () => {
@@ -59,8 +64,12 @@ export default function AnonymousChatPage() {
         };
 
         try {
-            // Send the message via the API for persistence
-            await anonymousCommunityService.sendAnonMessage(communityName, username.current, newMessage);
+            // Send the message via the API
+            await anonymousCommunityService.sendAnonMessage(
+                communityName,
+                username.current,
+                newMessage
+            );
 
             // Emit the message via socket for real-time broadcasting
             socketRef.current.emit("sendAnonMessage", messageData);
@@ -68,7 +77,11 @@ export default function AnonymousChatPage() {
             // Optimistically add the message to the local state
             setMessages((prevMessages) => [
                 ...prevMessages,
-                { username: username.current, content: newMessage, timestamp: new Date().toISOString() },
+                {
+                    username: username.current,
+                    content: newMessage,
+                    timestamp: new Date().toISOString(),
+                },
             ]);
 
             setNewMessage("");
